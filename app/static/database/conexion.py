@@ -1,5 +1,6 @@
 import os
-from decimal import Decimal
+from typing import Any, Dict, Optional, cast
+
 import mysql.connector
 from mysql.connector import Error
 
@@ -86,7 +87,7 @@ def obtener_factura_por_numero(numero_factura):
             "SELECT * FROM facturas WHERE numero_factura = %s LIMIT 1",
             (numero_factura,),
         )
-        fila = cursor.fetchone()
+        fila = cast(Optional[Dict[str, Any]], cursor.fetchone())
         if not fila:
             return None
 
@@ -327,9 +328,9 @@ def guardar_pedido_completo_bd(cliente_info, items_carrito, metodo_pago, total, 
 
     cursor = None
     try:
-        conexion.autocommit = False
         cursor = conexion.cursor()
         _asegurar_esquema_facturacion(cursor)
+        conexion.start_transaction()
 
         # 1. Obtener o crear cliente
         nombre_completo = f"{cliente_info.get('nombre', '')} {cliente_info.get('apellido', '')}".strip() or "Cliente"
