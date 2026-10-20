@@ -12,7 +12,7 @@ from pathlib import Path
 # Ajusta la ruta del proyecto para poder importar el paquete app
 # sin depender del directorio de ejecución exacto.
 BASE_DIR = Path(__file__).resolve().parent
-APP_DIR = BASE_DIR / 'app'
+APP_DIR = BASE_DIR 
 if str(APP_DIR) not in sys.path:
     sys.path.insert(0, str(APP_DIR))
 
