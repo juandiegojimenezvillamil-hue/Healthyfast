@@ -1,0 +1,307 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<section class="login-section py-5 my-3">
+  <div class="container">
+    <div class="row justify-content-center align-items-center g-5">
+
+      <!-- COLUMNA IZQUIERDA: Beneficios -->
+      <div class="col-lg-5 d-none d-lg-block">
+        <div class="benefits-panel p-5 rounded-4 h-100">
+          <span class="badge bg-vinotinto rounded-pill px-3 py-2 mb-3 d-inline-block">
+            ✨ Únete a Healthy Fast
+          </span>
+          <h2 class="fw-bold mb-2 text-dark">Regístrate y obtén</h2>
+          <p class="text-muted mb-4">Beneficios exclusivos para miembros de nuestra comunidad</p>
+
+          <div class="benefit-item d-flex align-items-start gap-3 mb-4">
+            <div class="benefit-icon">🎁</div>
+            <div>
+              <h6 class="fw-bold mb-1 text-dark">5% de Descuento en tu Primera Compra</h6>
+              <p class="text-muted small mb-0">Aplica automáticamente al completar tu registro y primer pedido.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item d-flex align-items-start gap-3 mb-4">
+            <div class="benefit-icon">🚚</div>
+            <div>
+              <h6 class="fw-bold mb-1 text-dark">Envío Prioritario</h6>
+              <p class="text-muted small mb-0">Clientes registrados tienen despacho preferencial en 2-3 días hábiles.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item d-flex align-items-start gap-3 mb-4">
+            <div class="benefit-icon">🔔</div>
+            <div>
+              <h6 class="fw-bold mb-1 text-dark">Ofertas Exclusivas</h6>
+              <p class="text-muted small mb-0">Recibe primero las promociones especiales y lanzamientos de nuevos productos.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item d-flex align-items-start gap-3 mb-4">
+            <div class="benefit-icon">💎</div>
+            <div>
+              <h6 class="fw-bold mb-1 text-dark">Puntos de Fidelidad</h6>
+              <p class="text-muted small mb-0">Acumula puntos con cada compra y canjéalos por descuentos reales.</p>
+            </div>
+          </div>
+
+          <div class="benefit-item d-flex align-items-start gap-3">
+            <div class="benefit-icon">📦</div>
+            <div>
+              <h6 class="fw-bold mb-1 text-dark">Historial de Pedidos</h6>
+              <p class="text-muted small mb-0">Revisa y da seguimiento a todos tus pedidos desde tu perfil.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA: Formulario -->
+      <div class="col-lg-5 col-md-8 col-sm-10">
+        <div class="card card-custom p-4 p-md-5 shadow-lg border-0 rounded-4">
+
+          <div class="text-center mb-4">
+            <h2 class="fw-bold text-dark m-0">
+              Control de <span class="text-vinotinto fuente-estetica">Acceso</span>
+            </h2>
+            <p class="text-muted small mt-1">Inicia sesión o crea tu cuenta</p>
+          </div>
+
+          <!-- TABS -->
+          <ul class="nav nav-pills nav-fill mb-4 rounded-3 overflow-hidden border" id="authTabs" role="tablist" style="background: #f5f5f5;">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link {% if not mostrar_registro %}active{% endif %} fw-semibold py-2 rounded-3" id="login-tab"
+                data-bs-toggle="pill" data-bs-target="#tab-login" type="button" role="tab">
+                <i class="fa-solid fa-lock me-1"></i> Ingresar
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link {% if mostrar_registro %}active{% endif %} fw-semibold py-2 rounded-3" id="registro-tab"
+                data-bs-toggle="pill" data-bs-target="#tab-registro" type="button" role="tab">
+                <i class="fa-solid fa-user-plus me-1"></i> Registrarse
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content" id="authTabsContent">
+
+            <!-- TAB LOGIN -->
+            <div class="tab-pane fade {% if not mostrar_registro %}show active{% endif %}" id="tab-login" role="tabpanel">
+              <form action="{{ url_for('main.login') }}" method="POST" id="formLogin">
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small" for="login-correo">
+                    <i class="fa-solid fa-envelope me-1"></i> Correo Electrónico
+                  </label>
+                  <input type="email" class="form-control form-control-lg rounded-3" id="login-correo"
+                    name="correo" placeholder="ejemplo@gmail.com" required autocomplete="email">
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label fw-semibold text-secondary small" for="login-password">
+                    <i class="fa-solid fa-key me-1"></i> Contraseña
+                  </label>
+                  <div class="input-group">
+                    <input type="password" class="form-control form-control-lg rounded-start-3" id="login-password"
+                      name="password" placeholder="Tu contraseña" required autocomplete="current-password" minlength="1">
+                    <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="togglePass('login-password', this)">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <button class="btn btn-vinotinto w-100 py-2 rounded-pill fw-bold shadow-sm" type="submit">
+                  <i class="fa-solid fa-lock me-2"></i> Iniciar Sesión
+                </button>
+
+                <p class="text-center text-muted small mt-3 mb-0">
+                  ¿No tienes cuenta?
+                  <a href="#" class="text-vinotinto fw-semibold text-decoration-none" onclick="switchTab('registro-tab')">
+                    Regístrate gratis
+                  </a>
+                </p>
+
+              </form>
+            </div>
+
+            <!-- TAB REGISTRO -->
+            <div class="tab-pane fade {% if mostrar_registro %}show active{% endif %}" id="tab-registro" role="tabpanel">
+              <form action="{{ url_for('main.registro') }}" method="POST" id="formRegistro">
+
+                <div class="row g-3 mb-3">
+                  <div class="col-6">
+                    <label class="form-label fw-semibold text-secondary small" for="reg-nombre">Nombre *</label>
+                    <input type="text" class="form-control rounded-3" id="reg-nombre" name="nombre"
+                      placeholder="Tu nombre" required>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label fw-semibold text-secondary small" for="reg-apellido">Apellido</label>
+                    <input type="text" class="form-control rounded-3" id="reg-apellido" name="apellido"
+                      placeholder="Tu apellido">
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small" for="reg-correo">
+                    <i class="fa-solid fa-envelope me-1"></i> Correo Electrónico *
+                  </label>
+                  <input type="email" class="form-control rounded-3" id="reg-correo" name="correo"
+                    placeholder="ejemplo@gmail.com" required autocomplete="email">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small" for="reg-password">
+                    <i class="fa-solid fa-key me-1"></i> Contraseña * (mín. 6 caracteres)
+                  </label>
+                  <div class="input-group">
+                    <input type="password" class="form-control rounded-start-3" id="reg-password"
+                      name="password" placeholder="Crea tu contraseña" required minlength="6" autocomplete="new-password">
+                    <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="togglePass('reg-password', this)">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label fw-semibold text-secondary small" for="reg-password2">
+                    <i class="fa-solid fa-lock me-1"></i> Confirmar Contraseña *
+                  </label>
+                  <input type="password" class="form-control rounded-3" id="reg-password2"
+                    name="password2" placeholder="Repite tu contraseña" required minlength="6" autocomplete="new-password">
+                  <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+                </div>
+
+                <!-- Mini beneficios -->
+                <div class="bg-light rounded-3 p-3 mb-4 d-flex align-items-center gap-2">
+                  <span style="font-size:1.3rem;">🎁</span>
+                  <small class="text-muted"><strong class="text-vinotinto">¡Obtén 5% OFF</strong> en tu primera compra al registrarte!</small>
+                </div>
+
+                <button class="btn btn-vinotinto w-100 py-2 rounded-pill fw-bold shadow-sm" type="submit">
+                  <i class="fa-solid fa-user-plus me-2"></i> Crear mi Cuenta
+                </button>
+
+                <p class="text-center text-muted small mt-3 mb-0">
+                  ¿Ya tienes cuenta?
+                  <a href="#" class="text-vinotinto fw-semibold text-decoration-none" onclick="switchTab('login-tab')">
+                    Inicia sesión
+                  </a>
+                </p>
+
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .login-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .benefits-panel {
+    background: linear-gradient(135deg, #fdf6f8 0%, #fff5f0 100%);
+    border: 1px solid rgba(139, 68, 85, 0.1);
+  }
+
+  .benefit-icon {
+    font-size: 1.5rem;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, rgba(114,28,36,0.1), rgba(114,28,36,0.18));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-pills .nav-link.active {
+    background: var(--color-vinotinto, #721c24) !important;
+    color: #fff !important;
+  }
+
+  .nav-pills .nav-link {
+    color: #666;
+    transition: all 0.25s;
+  }
+
+  [data-theme="dark"] .benefits-panel {
+    background: linear-gradient(135deg, #1a1010 0%, #180f0a 100%);
+    border-color: rgba(255,127,153,0.12);
+  }
+
+  [data-theme="dark"] .card-custom {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+  }
+
+  [data-theme="dark"] .form-control,
+  [data-theme="dark"] .form-select {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-main) !important;
+  }
+
+  [data-theme="dark"] .form-control::placeholder {
+    color: var(--text-secondary) !important;
+  }
+
+  [data-theme="dark"] #authTabs {
+    background: #1a1a1a !important;
+  }
+
+  [data-theme="dark"] .bg-light {
+    background-color: var(--bg-light) !important;
+  }
+</style>
+
+<script>
+  function switchTab(tabId) {
+    const tab = document.getElementById(tabId);
+    if (tab) {
+      const bsTab = new bootstrap.Tab(tab);
+      bsTab.show();
+    }
+    return false;
+  }
+
+  function togglePass(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'fa-solid fa-eye-slash';
+    } else {
+      input.type = 'password';
+      icon.className = 'fa-solid fa-eye';
+    }
+  }
+
+  // Validación de contraseñas en registro
+  document.getElementById('formRegistro')?.addEventListener('submit', function(e) {
+    const p1 = document.getElementById('reg-password');
+    const p2 = document.getElementById('reg-password2');
+    if (p1.value !== p2.value) {
+      e.preventDefault();
+      p2.classList.add('is-invalid');
+      p2.focus();
+    } else {
+      p2.classList.remove('is-invalid');
+    }
+  });
+
+  document.getElementById('reg-password2')?.addEventListener('input', function() {
+    const p1 = document.getElementById('reg-password').value;
+    this.classList.toggle('is-invalid', this.value !== p1 && this.value.length > 0);
+    this.classList.toggle('is-valid', this.value === p1 && this.value.length > 0);
+  });
+</script>
+
+{% endblock %}

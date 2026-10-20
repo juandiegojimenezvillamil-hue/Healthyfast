@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Healthy Fast | Calidad Profesional</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Loader -->
+    <div id="pantalla-loader">
+      <div class="spinner-custom mb-3"></div>
+      <h4 class="fw-bold text-dark">
+        HEALTHY
+        <span class="fuente-estetica text-danger">fast</span>
+      </h4>
+    </div>
+
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-custom sticky-top py-3 shadow-sm"
+    >
+      <div class="container">
+        <!-- LOGO -->
+        <a
+          class="navbar-brand fw-bold text-dark fs-3"
+          href="{{ url_for('main.index') }}"
+        >
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+          
+        </a>
+
+        <!-- BTN MOBILE -->
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENU -->
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto align-items-center gap-3">
+            <li class="nav-item">
+              <a
+                class="nav-link fw-semibold text-dark"
+                href="{{ url_for('main.index') }}"
+              >
+                Inicio
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link fw-semibold text-dark"
+                href="{{ url_for('main.productos') }}"
+              >
+                Productos
+              </a>
+            </li>
+
+            {% if session.get('usuario') %} {% if session.get('rol') ==
+            'administrador' %}
+
+            <li class="nav-item">
+              <a
+                class="btn btn-sm btn-vinotinto rounded-pill px-3"
+                href="{{ url_for('main.admin_dashboard') }}"
+              >
+                <i class="fa-solid fa-gauge me-1"></i>
+                Panel Admin
+              </a>
+            </li>
+
+            {% endif %}
+
+            <li class="nav-item">
+              <span class="badge bg-secondary p-2">
+                Perfil: {{ session.get('rol') }}
+              </span>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="btn btn-sm btn-outline-danger"
+                href="{{ url_for('main.logout') }}"
+              >
+                Salir
+              </a>
+            </li>
+
+            {% else %}
+
+            <li class="nav-item">
+              <a
+                class="btn btn-outline-dark rounded-pill px-3"
+                href="{{ url_for('main.login') }}"
+              >
+                Ingresar
+              </a>
+            </li>
+
+            {% endif %}
+
+            <!-- DARK MODE -->
+            <li class="nav-item">
+              <button class="btn btn-light rounded-circle" id="toggle-darkmode">
+                <i class="fa-solid fa-moon"></i>
+              </button>
+            </li>
+
+            <!-- CARRITO -->
+            <li class="nav-item">
+              <button
+                class="btn btn-dark position-relative rounded-circle"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#cartCanvas"
+              >
+                <i class="fa-solid fa-shopping-bag"></i>
+
+                <span
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-vinotinto"
+                  id="badge-contador"
+                >
+                  0
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- OFFCANVAS -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartCanvas">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="fw-bold m-0">
+          Tu Bolsa
+          <span class="fuente-estetica text-vinotinto"> Healthy </span>
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+
+      <div class="offcanvas-body d-flex flex-column justify-content-between">
+        <div id="items-carrito-render">
+          <p class="text-muted text-center py-4">Bolsa vacía.</p>
+        </div>
+
+        <div class="border-top pt-3">
+          <div class="d-flex justify-content-between mb-3 fw-bold fs-5">
+            <span>Total:</span>
+
+            <span id="total-precio-render" class="text-vinotinto">
+              $0 COP
+            </span>
+          </div>
+
+          <button
+            id="btn-process-order"
+            class="btn btn-vinotinto w-100 py-2 rounded-pill fw-bold"
+            type="button"
+          >
+            Procesar Orden
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-notification" class="toast-notification"></div>
+
+    <!-- ALERTAS -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="container mt-3">
+      {% for cat, msg in messages %}
+
+      <div class="alert alert-{{ cat }} alert-dismissible fade show">
+        {{ msg }}
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <!-- CONTENIDO -->
+    <main>{% block content %}{% endblock %}</main>
+
+    <!-- FOOTER MEJORADO -->
+    <footer class="footer-custom text-white mt-5 pt-5 pb-3">
+      <div class="container">
+        <div class="row g-4 pb-4 border-bottom border-secondary">
+
+          <!-- Brand -->
+          <div class="col-md-4">
+            <h5 class="fw-bold fs-4 mb-2">
+              HEALTHY
+              <span class="fuente-estetica text-danger">fast</span>
+            </h5>
+            <p class="text-white-50 small mb-3">
+              Soluciones avanzadas en kits de emergencia y estética del cuidado personal para Colombia.
+            </p>
+            <div class="d-flex gap-3">
+              <a href="mailto:fasthealthy40@gmail.com" class="footer-social" title="Email">
+                <i class="fa-solid fa-envelope"></i>
+              </a>
+              <a href="#" class="footer-social" title="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="#" class="footer-social" title="WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+              <a href="#" class="footer-social" title="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Navegación -->
+          <div class="col-6 col-md-2">
+            <h6 class="fw-bold text-uppercase small mb-3">Tienda</h6>
+            <ul class="list-unstyled footer-links">
+              <li><a href="{{ url_for('main.index') }}">Inicio</a></li>
+              <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
+              <li><a href="{{ url_for('main.productos') }}?categoria=skincare">Skincare</a></li>
+              <li><a href="{{ url_for('main.productos') }}?categoria=body">Body Care</a></li>
+              <li><a href="{{ url_for('main.productos') }}?categoria=pets">Pets</a></li>
+            </ul>
+          </div>
+
+          <!-- Categorías -->
+          <div class="col-6 col-md-3">
+            <h6 class="fw-bold text-uppercase small mb-3">Mi Cuenta</h6>
+            <ul class="list-unstyled footer-links">
+              <li><a href="{{ url_for('main.login') }}">Iniciar Sesión</a></li>
+              <li><a href="{{ url_for('main.envio') }}">Envío</a></li>
+              <li><a href="{{ url_for('main.pago') }}">Pago</a></li>
+              {% if session.get('rol') == 'administrador' %}
+              <li><a href="{{ url_for('main.admin_dashboard') }}">Panel Admin</a></li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <!-- Contacto -->
+          <div class="col-md-3">
+            <h6 class="fw-bold text-uppercase small mb-3">Contacto</h6>
+            <ul class="list-unstyled footer-links">
+              <li>
+                <i class="fa-solid fa-envelope me-2 text-white-50"></i>
+                <a href="mailto:fasthealthy40@gmail.com">fasthealthy40@gmail.com</a>
+              </li>
+              <li class="mt-2">
+                <i class="fa-solid fa-location-dot me-2 text-white-50"></i>
+                <span class="text-white-50 small">Colombia</span>
+              </li>
+              <li class="mt-2">
+                <i class="fa-solid fa-clock me-2 text-white-50"></i>
+                <span class="text-white-50 small">Lun - Sáb, 8am - 6pm</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Copyright -->
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center pt-3 gap-2">
+          <p class="m-0 small text-white-50">
+            &copy; 2026 Healthy Fast Store. Todos los derechos reservados.
+          </p>
+          <p class="m-0 small text-white-50">
+            Proyecto de Grado — Desarrollado con ❤️ en Colombia
+          </p>
+        </div>
+      </div>
+    </footer>
+
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/script.js', v='20260915-2') }}"></script>
+  </body>
+</html>

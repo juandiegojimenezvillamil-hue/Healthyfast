@@ -1,0 +1,93 @@
+﻿{% extends 'aplicacion/layout_app.html' %}
+{% block title %}Catálogo — HealthyFast App{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<div class="px-3 py-3">
+
+  <!-- TÍTULO -->
+  <h1 class="fw-bold fs-5 mb-1">
+    Catálogo <span class="text-vinotinto fuente-estetica">{{ categoria_nombre }}</span>
+  </h1>
+  <p class="text-muted small mb-3">Desliza para filtrar por categoría</p>
+
+  <!-- FILTRO HORIZONTAL SCROLL -->
+  <div class="categorias-scroll mb-4">
+    <a href="{{ url_for('main.app_productos') }}"
+       class="categoria-pill {% if categoria_activa == 'todos' %}activo{% endif %}">
+      Todos
+    </a>
+    {% for cat in categorias %}
+    <a href="{{ url_for('main.app_productos') }}?categoria={{ cat.slug }}"
+       class="categoria-pill {% if categoria_activa == cat.slug %}activo{% endif %}">
+      {{ cat.nombre }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <!-- GRID DE PRODUCTOS -->
+  {% if productos %}
+  <div class="productos-grid-app">
+    {% for p in productos %}
+    <div class="producto-card-app">
+      <div class="zoom-container rounded-3 mb-2" style="height: 155px;">
+        <img src="{{ p.imagen }}" alt="{{ p.nombre }}" class="w-100 h-100 object-fit-cover">
+      </div>
+      <span class="badge bg-light text-dark border text-uppercase mb-1"
+            style="font-size:0.6rem; font-family: monospace;">{{ p.categoria }}</span>
+      <h6 class="fw-bold m-0 small lh-sm">{{ p.nombre }}</h6>
+        <p class="text-muted small mb-2"><strong>Sirve para:</strong> {{ p.desc }}</p>
+      <small class="text-secondary d-block mb-2" style="font-size:0.7rem;">
+        Stock: <strong class="text-dark">{{ p.stock }} uds</strong>
+      </small>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-vinotinto" style="font-size:0.9rem;">
+            ${{ "{:,.0f}".format(p.precio) }} COP
+        </span>
+        <button class="btn btn-vinotinto rounded-pill py-1 px-2"
+                style="font-size:0.7rem;"
+                onclick="agregarAlCarrito('{{ p.id }}', '{{ p.nombre }}', '{{ p.precio }}')">              
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="fa-solid fa-box-open fs-1 text-muted mb-3 d-block"></i>
+    <h6 class="fw-bold">Sin productos en esta categoría</h6>
+    <p class="text-muted small">Prueba con otra categoría.</p>
+    <a href="{{ url_for('main.app_productos') }}" class="btn btn-vinotinto rounded-pill px-4">Ver Todos</a>
+  </div>
+  {% endif %}
+
+</div>
+
+<style>
+.categorias-scroll {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
+}
+.categorias-scroll::-webkit-scrollbar { display: none; }
+.categoria-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: var(--bg-card); border: 1px solid rgba(0,0,0,0.08);
+  padding: 7px 14px; border-radius: 20px; white-space: nowrap;
+  font-size: 0.8rem; font-weight: 600; color: var(--text-main);
+  text-decoration: none; transition: all 0.2s ease; flex-shrink: 0;
+}
+.categoria-pill.activo,
+.categoria-pill:active {
+  background-color: var(--color-vinotinto); color: #fff; border-color: transparent;
+}
+.productos-grid-app {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 20px;
+}
+.producto-card-app {
+  background-color: var(--bg-card); border-radius: 16px; padding: 12px;
+  border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+[data-theme="dark"] .categoria-pill { border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .producto-card-app { border-color: rgba(255,255,255,0.06); }
+</style>
+{% endblock %}

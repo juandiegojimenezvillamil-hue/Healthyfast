@@ -1,0 +1,414 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="checkout-container card-custom mx-auto shadow-sm" style="max-width: 600px;">
+        <h2 class="text-center mb-5 fw-bold display-6">
+            <span class="text-vinotinto fuente-estetica">Dirección</span> de Envío
+        </h2>
+
+        {% if datos_envio_previo %}
+        <div class="alert alert-light border d-flex align-items-center gap-3 rounded-4 mb-4">
+            <i class="fa-solid fa-clock-rotate-left text-vinotinto fs-4"></i>
+            <div class="flex-grow-1">
+                <strong class="d-block">Usar datos de mi última compra</strong>
+                <small class="text-muted">Encontramos una dirección guardada para tu cuenta.</small>
+            </div>
+            <button type="button" class="btn btn-vinotinto btn-sm rounded-pill" id="usar-envio-previo-web">Cargar</button>
+        </div>
+        {% endif %}
+
+        <form id="form-envio" action="/envio" method="POST" class="needs-validation" novalidate>
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="form-label fw-semibold">Correo Electrónico *</label>
+                <input type="email" class="form-control form-control-lg rounded-3" id="email" name="email" 
+                    placeholder="ejemplo@gmail.com" required
+                    pattern="^[A-Za-z0-9._%+\-]+@(?:gmail|hotmail|outlook|yahoo|icloud|live)\.[A-Za-z]{2,}$"
+                    title="Ingresa un correo válido con dominio, por ejemplo: nombre@gmail.com">
+                <div class="invalid-feedback">Ingresa un correo válido con dominio, ejemplo: nombre@gmail.com.</div>
+            </div>
+
+            <!-- Nombre y Apellido -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label for="nombre" class="form-label fw-semibold">Nombre *</label>
+                    <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre" 
+                        placeholder="Tu nombre" required>
+                    <div class="invalid-feedback">El nombre es obligatorio.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="apellido" class="form-label fw-semibold">Apellido *</label>
+                    <input type="text" class="form-control form-control-lg rounded-3" id="apellido" name="apellido" 
+                        placeholder="Tu apellido" required>
+                    <div class="invalid-feedback">El apellido es obligatorio.</div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-5">
+                    <label for="tipo_documento" class="form-label fw-semibold">Tipo de documento *</label>
+                    <select class="form-select form-select-lg rounded-3" id="tipo_documento" name="tipo_documento" required>
+                        <option value="CC" selected>Cédula de ciudadanía</option>
+                        <option value="CE">Cédula de extranjería</option>
+                        <option value="NIT">NIT</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <label for="documento" class="form-label fw-semibold">Número de documento *</label>
+                    <input type="text" class="form-control form-control-lg rounded-3" id="documento" name="documento" required maxlength="60">
+                </div>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="mb-4">
+                <label for="telefono" class="form-label fw-semibold">Teléfono *</label>
+                <input type="text" class="form-control form-control-lg rounded-3" id="telefono" name="telefono" 
+                    placeholder="3001234567" required inputmode="numeric" pattern="[0-9]{7,15}" maxlength="15"
+                    title="Solo se permiten números. Ejemplo: 3001234567">
+                <div class="invalid-feedback">Solo se permiten números en el teléfono.</div>
+            </div>
+
+            <!-- Dirección -->
+            <div class="mb-4">
+                <label for="direccion" class="form-label fw-semibold">Dirección *</label>
+                <input type="text" class="form-control form-control-lg rounded-3" id="direccion" name="direccion" 
+                    placeholder="Calle 10 #15-25, barrio El Poblado" required
+                    pattern="[A-Za-zÀ-ÿ0-9#°.,\-\s]{8,}"
+                    title="Escribe una dirección válida con letras, números y caracteres básicos.">
+                <div class="invalid-feedback">La dirección debe contener letras y números, por ejemplo: Calle 10 #15-25.</div>
+            </div>
+
+            <!-- Referencia -->
+            <div class="mb-4">
+                <label for="referencia" class="form-label fw-semibold">Referencia (Apartamento, casa, etc.)</label>
+                <input type="text" class="form-control form-control-lg rounded-3" id="referencia" name="referencia" 
+                    placeholder="Ej: Casa blanca con rejas rojas, apto 302">
+            </div>
+
+            <!-- Ciudad o municipio -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6" style="display:none;">
+                    <label for="estado" class="form-label fw-semibold">Pais</label>
+                    <select class="form-select form-select-lg rounded-3" id="estado" name="estado">
+                        <option value="Colombia" selected>Colombia</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label for="ciudad" class="form-label fw-semibold">Ciudad o municipio de Colombia *</label>
+                    <input class="form-control form-control-lg rounded-3" id="ciudad" name="ciudad" list="municipios-colombia" placeholder="Medellin o cualquier municipio" required>
+                    <datalist id="municipios-colombia">
+                        <option value="Bogota"><option value="Medellin"><option value="Cali"><option value="Barranquilla"><option value="Cartagena"><option value="Bucaramanga"><option value="Pereira"><option value="Manizales"><option value="Santa Marta"><option value="Villavicencio"><option value="Pasto"><option value="Ibague"><option value="Neiva"><option value="Monteria"><option value="Sincelejo"><option value="Tunja"><option value="Armenia"><option value="Valledupar"><option value="Popayan"><option value="Riohacha"><option value="Yopal"><option value="Florencia"><option value="Quibdo"><option value="Leticia"><option value="Mitu">
+                    </datalist>
+                    <div class="invalid-feedback">La ciudad es obligatoria.</div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="departamento" class="form-label fw-semibold">Departamento *</label>
+                <input class="form-control form-control-lg rounded-3" id="departamento" name="departamento"
+                    list="departamentos-colombia" placeholder="Antioquia" required>
+                <datalist id="departamentos-colombia">
+                    <option value="Amazonas"><option value="Antioquia"><option value="Arauca">
+                    <option value="Atlántico"><option value="Bogotá D.C."><option value="Bolívar">
+                    <option value="Boyacá"><option value="Caldas"><option value="Caquetá">
+                    <option value="Casanare"><option value="Cauca"><option value="Cesar">
+                    <option value="Chocó"><option value="Córdoba"><option value="Cundinamarca">
+                    <option value="Guainía"><option value="Guaviare"><option value="Huila">
+                    <option value="La Guajira"><option value="Magdalena"><option value="Meta">
+                    <option value="Nariño"><option value="Norte de Santander"><option value="Putumayo">
+                    <option value="Quindío"><option value="Risaralda"><option value="San Andrés y Providencia">
+                    <option value="Santander"><option value="Sucre"><option value="Tolima">
+                    <option value="Valle del Cauca"><option value="Vaupés"><option value="Vichada">
+                </datalist>
+            </div>
+
+            <!-- Código Postal -->
+            <div class="mb-4">
+                <label for="cp" class="form-label fw-semibold">Código Postal *</label>
+                <input type="text" class="form-control form-control-lg rounded-3" id="cp" name="cp" 
+                    placeholder="050001" required>
+                <div class="invalid-feedback">El código postal es obligatorio.</div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-5">
+                <a href="/" class="btn btn-outline-dark btn-lg rounded-pill px-5 py-2">
+                    <i class="fas fa-arrow-left me-2"></i> Volver
+                </a>
+                <button type="submit" class="btn btn-vinotinto btn-lg rounded-pill px-5 py-2 fw-bold">
+                    Continuar al Pago <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formulario = document.getElementById('form-envio');
+        if (!formulario) return;
+
+        const camposEnvio = Array.from(formulario.querySelectorAll('input:not([type="hidden"]), select'));
+        camposEnvio.forEach(function (campo, indice) {
+            campo.addEventListener('keydown', function (evento) {
+                if (evento.key !== 'Enter' || indice === camposEnvio.length - 1) return;
+                evento.preventDefault();
+                camposEnvio[indice + 1].focus();
+            });
+        });
+
+        {% if datos_envio_previo %}
+        const datosPrevios = {{ datos_envio_previo|tojson }};
+        const boton = document.getElementById('usar-envio-previo-web');
+        if (boton) {
+            boton.addEventListener('click', function () {
+                Object.entries(datosPrevios).forEach(([campo, valor]) => {
+                    const input = formulario.querySelector(`[name="${campo}"]`);
+                    if (input && valor) input.value = valor;
+                });
+                boton.textContent = 'Cargados';
+                boton.disabled = true;
+            });
+        }
+        {% endif %}
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('form-envio');
+        const email = document.getElementById('email');
+        const telefono = document.getElementById('telefono');
+        const direccion = document.getElementById('direccion');
+        const estado = document.getElementById('estado');
+        const ciudad = document.getElementById('ciudad');
+
+        const departamentosCiudades = {
+            'Amazonas': ['Leticia', 'Puerto Nariño', 'La Chorrera', 'Tarapacá'],
+            'Antioquia': ['Medellín', 'Bello', 'Itagüí', 'Envigado', 'Rionegro', 'Turbo', 'Apartadó', 'Necoclí', 'Santa Fe de Antioquia', 'Guatapé', 'Girardota', 'La Ceja', 'Marinilla', 'Barbosa', 'Caldas', 'Amagá', 'Ebéjico', 'Sabaneta', 'Copacabana', 'El Peñol', 'Belén', 'Chigorodó', 'San Rafael', 'Segovia', 'Remedios', 'Yarumal', 'Dabeiba', 'Murindó', 'Sonson', 'Anzá', 'Armenia'],
+            'Arauca': ['Arauca', 'Arauquita', 'Fortul', 'Tame', 'Saravena', 'Cravo Norte', 'Pore', 'Puerto Rondón'],
+            'Atlántico': ['Barranquilla', 'Soledad', 'Malambo', 'Galapa', 'Puerto Colombia', 'Sabanagrande', 'Baranoa', 'Piojó', 'Luruaco', 'Santo Tomás', 'Usiacurí', 'Palmar de Varela', 'Campo de la Cruz', 'Manatí', 'Juan de Acosta'],
+            'Bogotá D.C.': ['Bogotá', 'Usaquén', 'Chapinero', 'Kennedy', 'Engativá', 'Suba', 'Bosa', 'Fontibón', 'Teusaquillo', 'Puente Aranda', 'San Cristóbal', 'Ciudad Bolívar'],
+            'Bolívar': ['Cartagena', 'Magangué', 'Turbaco', 'Arjona', 'Santa Rosa del Sur', 'San Juan Nepomuceno', 'Mompós', 'María la Baja', 'Calamar', 'Clemencia', 'Córdoba', 'Pinillos', 'El Carmen de Bolívar', 'San Martin de Loba', 'Morales', 'Mahates'],
+            'Boyacá': ['Tunja', 'Duitama', 'Sogamoso', 'Chiquinquirá', 'Villa de Leyva', 'Paipa', 'Moniquirá', 'Arcabuco', 'Ramiriquí', 'Muzo', 'Nobsa', 'Soatá', 'Cómbita', 'Samacá', 'Sotaquirá', 'Pesca', 'Belén', 'Garagoa', 'Otanche', 'Tibasosa'],
+            'Caldas': ['Manizales', 'La Dorada', 'Villamaría', 'Chinchiná', 'Palestina', 'Riosucio', 'Marquetalia', 'Aranzazu', 'Filadelfia', 'Pensilvania', 'Salamina', 'Pácora', 'Belalcázar', 'Supía', 'Anserma'],
+            'Caquetá': ['Florencia', 'San Vicente del Caguán', 'Albania', 'Morelia', 'Curillo', 'Milán', 'El Doncello', 'Valparaíso', 'La Montañita', 'Solano', 'Puerto Rico'],
+            'Casanare': ['Yopal', 'Aguazul', 'Villanueva', 'Paz de Ariporo', 'Tauramena', 'Hato Corozal', 'San Luis de Palenque', 'Monterrey', 'Pore'],
+            'Cauca': ['Popayán', 'Santander de Quilichao', 'Puerto Tejada', 'Patía', 'Piendamó', 'Silvia', 'Suárez', 'Padilla', 'Timbío', 'Toribío', 'Almaguer', 'Caldono', 'Belalcázar', 'Inzá', 'La Vega'],
+            'Cesar': ['Valledupar', 'Aguachica', 'La Jagua de Ibirico', 'San Diego', 'Curumaní', 'Bosconia', 'El Copey', 'Chiriguaná', 'Gamarra', 'Pueblo Bello', 'Río de Oro', 'La Paz', 'Ábrego'],
+            'Chocó': ['Quibdó', 'Nuquí', 'Bahía Solano', 'Istmina', 'Juradó', 'El Carmen de Atrato', 'Condoto', 'Tadó', 'Unguía', 'Riosucio', 'Medio Atrato', 'La Salada', 'Bajo Baudó'],
+            'Córdoba': ['Montería', 'Lorica', 'Planeta Rica', 'Cereté', 'Tierralta', 'Chinu', 'San Pelayo', 'Moñitos', 'Puerto Libertador', 'Valencia', 'Los Córdobas', 'Sahagún', 'Canalete', 'Pueblo Nuevo', 'Ayapel'],
+            'Cundinamarca': ['Bogotá', 'Soacha', 'Zipaquirá', 'Chía', 'Girardot', 'Fusagasugá', 'Funza', 'Mosquera', 'Facatativá', 'Sibaté', 'Madrid', 'La Calera', 'Cajicá', 'Tabio', 'Tenjo', 'Sopó', 'Gachancipá', 'Ubaté', 'Villeta', 'Bojacá', 'Machetá', 'Guaduas', 'Nilo', 'Melgar', 'Pandi', 'Tocaima', 'Pacho', 'Appa'],
+            'Guainía': ['Inírida', 'Barranco Minas', 'La Guadalupe', 'Mapiripana', 'San Felipe', 'Puerto Colombia', 'Pana Pana'],
+            'Guaviare': ['San José del Guaviare', 'Miraflores', 'Calamar', 'El Retorno'],
+            'Huila': ['Neiva', 'Pitalito', 'Garzón', 'La Plata', 'Campoalegre', 'Acevedo', 'Rivera', 'Túquerres', 'San Agustín', 'Tarqui', 'Palermo'],
+            'La Guajira': ['Riohacha', 'Maicao', 'Uribia', 'Manaure', 'San Juan del Cesar', 'Villanueva', 'Hatonuevo', 'Albania', 'Barrancas', 'Urumita', 'Distracción'],
+            'Magdalena': ['Santa Marta', 'Ciénaga', 'Fundación', 'El Banco', 'Plato', 'Pivijay', 'Zona Bananera', 'Aracataca', 'El Pinzon', 'Mompox', 'Salamina', 'Sitionuevo'],
+            'Meta': ['Villavicencio', 'Acacías', 'Granada', 'Guamal', 'La Macarena', 'Puerto Concordia', 'Cumaral', 'Cabuyaro', 'Restrepo', 'San Carlos de Guaroa'],
+            'Nariño': ['Pasto', 'Ipiales', 'Tumaco', 'Tuquerres', 'Barbacoas', 'La Cruz', 'Sandoná', 'Taminango', 'Ospina', 'Chachagüí', 'Santos', 'Yacuanquer', 'Cumbitara'],
+            'Norte de Santander': ['Cúcuta', 'Pamplona', 'Villa del Rosario', 'Ocaña', 'Los Patios', 'El Zulia', 'Toledo', 'Chinácota', 'Bucarasica', 'Lourdes', 'Sardinata', 'Ragonvalia', 'Mutiscua'],
+            'Putumayo': ['Mocoa', 'Puerto Asís', 'Villa Garzón', 'Puerto Caicedo', 'San Miguel', 'Sibundoy', 'Orito'],
+            'Quindío': ['Armenia', 'Montenegro', 'Circasia', 'Pijao', 'Calarcá', 'La Tebaida', 'Filandia', 'Salento', 'Buenavista'],
+            'Risaralda': ['Pereira', 'Dosquebradas', 'Santa Rosa de Cabal', 'La Virginia', 'Marsella', 'Belén de Umbría', 'Apía', 'La Celia', 'Balboa', 'Mistrató'],
+            'San Andrés y Providencia': ['San Andrés', 'Providencia', 'Santa Catalina'],
+            'Santander': ['Bucaramanga', 'Floridablanca', 'Girón', 'Piedecuesta', 'Barrancabermeja', 'Socorro', 'San Gil', 'Málaga', 'Charalá', 'Barichara', 'San Vicente de Chucurí', 'El Socorro', 'Bucaramanga', 'Vélez', 'Pamplonita', 'Lebrija', 'Rionegro', 'Aguada', 'Simití'],
+            'Sucre': ['Sincelejo', 'Corozal', 'San Onofre', 'Tolú', 'Chalán', 'Sampués', 'Morroa', 'San Marcos', 'Colosó', 'Coveñas', 'Palmito', 'Majagual', 'Ovejas'],
+            'Tolima': ['Ibagué', 'Espinal', 'Melgar', 'Honda', 'Líbano', 'Mariquita', 'Armero', 'Fresno', 'Chaparral', 'El Espinal', 'Ataco', 'Guamo'],
+            'Valle del Cauca': ['Cali', 'Palmira', 'Buenaventura', 'Tulúa', 'Cartago', 'Buga', 'Jamundí', 'Yumbo', 'Florida', 'Caicedonia', 'Candelaria', 'Pradera', 'Tuluá', 'Zarzal', 'Guacarí'],
+            'Vaupés': ['Mitú', 'Carurú', 'Papunaua', 'Yavaraté', 'Taraira'],
+            'Vichada': ['Puerto Carreño', 'La Primavera', 'Cumaribo', 'Santa Rosalía'],
+            'Caldas': ['Manizales', 'La Dorada', 'Villamaría', 'Chinchiná', 'Palestina', 'Riosucio', 'Marquetalia', 'Aranzazu', 'Filadelfia', 'Pensilvania', 'Salamina', 'Pácora', 'Belalcázar', 'Supía', 'Anserma'],
+            'Norte de Santander': ['Cúcuta', 'Pamplona', 'Villa del Rosario', 'Ocaña', 'Los Patios', 'El Zulia', 'Toledo', 'Chinácota', 'Bucarasica', 'Lourdes', 'Sardinata', 'Ragonvalia', 'Mutiscua']
+        };
+
+        departamentosCiudades['Colombia'] = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Cartagena', 'Bucaramanga', 'Pereira', 'Manizales', 'Santa Marta', 'Villavicencio', 'Pasto', 'Ibagué', 'Neiva', 'Montería', 'Sincelejo', 'Tunja', 'Armenia', 'Valledupar', 'Popayán', 'Riohacha', 'Yopal', 'Florencia', 'Quibdó', 'Leticia', 'Puerto Carreño', 'San José del Guaviare', 'Mocoa', 'Inírida', 'Mitú', 'Soacha', 'Itagüí', 'Envigado', 'Rionegro', 'Turbo', 'Apartadó', 'Sogamoso', 'Duitama', 'Girardot', 'Zipaquirá', 'Chía', 'Jamundí', 'Palmira', 'Buenaventura', 'Ciénaga', 'Maicao', 'Ocaña', 'Dosquebradas', 'San Gil', 'Tuluá', 'Guadalajara de Buga'];
+        const departamentos = ['Colombia'];
+        departamentos.forEach((departamento) => {
+            const option = document.createElement('option');
+            option.value = departamento;
+            option.textContent = departamento;
+            estado.appendChild(option);
+        });
+
+        function cargarCiudadesPorDepartamento(departamento) {
+            if (ciudad.tagName === 'INPUT') return;
+            const ciudades = departamentosCiudades[departamento] || ['Selecciona una ciudad'];
+            ciudad.innerHTML = '<option value="">Selecciona una ciudad</option>';
+
+            ciudades.forEach((nombreCiudad) => {
+                const option = document.createElement('option');
+                option.value = nombreCiudad;
+                option.textContent = nombreCiudad;
+                ciudad.appendChild(option);
+            });
+        }
+
+        estado.addEventListener('change', function () {
+            cargarCiudadesPorDepartamento(this.value);
+        });
+
+        cargarCiudadesPorDepartamento('Colombia');
+
+        if (!form || !email || !telefono || !direccion) return;
+
+        telefono.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        email.addEventListener('input', function () {
+            this.value = this.value.trim();
+        });
+
+        direccion.addEventListener('input', function () {
+            this.value = this.value.trim();
+        });
+
+        form.addEventListener('submit', function (event) {
+            const emailRegex = /^[A-Za-z0-9._%+\-]+@(?:gmail|hotmail|outlook|yahoo|icloud|live)\.[A-Za-z]{2,}$/i;
+            const telefonoRegex = /^[0-9]{7,15}$/;
+            const direccionRegex = /^[A-Za-zÀ-ÿ0-9#°.,\-\s]{8,}$/;
+
+            let esValido = true;
+
+            if (!emailRegex.test(email.value.trim())) {
+                email.classList.add('is-invalid');
+                email.classList.remove('is-valid');
+                esValido = false;
+            } else {
+                email.classList.remove('is-invalid');
+                email.classList.add('is-valid');
+            }
+
+            if (!telefonoRegex.test(telefono.value.trim())) {
+                telefono.classList.add('is-invalid');
+                telefono.classList.remove('is-valid');
+                esValido = false;
+            } else {
+                telefono.classList.remove('is-invalid');
+                telefono.classList.add('is-valid');
+            }
+
+            if (!direccionRegex.test(direccion.value.trim())) {
+                direccion.classList.add('is-invalid');
+                direccion.classList.remove('is-valid');
+                esValido = false;
+            } else {
+                direccion.classList.remove('is-invalid');
+                direccion.classList.add('is-valid');
+            }
+
+            if (!estado.value) {
+                estado.classList.add('is-invalid');
+                estado.classList.remove('is-valid');
+                esValido = false;
+            } else {
+                estado.classList.remove('is-invalid');
+                estado.classList.add('is-valid');
+            }
+
+            if (!ciudad.value) {
+                ciudad.classList.add('is-invalid');
+                ciudad.classList.remove('is-valid');
+                esValido = false;
+            } else {
+                ciudad.classList.remove('is-invalid');
+                ciudad.classList.add('is-valid');
+            }
+
+            if (!esValido) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+
+<style>
+    .card-custom {
+        border: none;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    }
+
+    .form-control:focus {
+        border-color: #8B4455;
+        box-shadow: 0 0 0 0.2rem rgba(139, 68, 85, 0.15);
+    }
+
+    .form-control-lg {
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+    }
+
+    .form-label {
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 2rem;
+    }
+
+    .invalid-feedback {
+        display: block;
+    }
+
+    [data-theme="dark"] .checkout-container .form-label {
+        color: var(--text-main) !important;
+    }
+
+    [data-theme="dark"] .checkout-container {
+        background-color: #141414 !important;
+        background-image: none !important;
+        color: var(--text-main);
+    }
+
+    [data-theme="dark"] .checkout-container .form-control,
+    [data-theme="dark"] .checkout-container .form-select {
+        background-color: var(--input-bg) !important;
+        border-color: var(--input-border) !important;
+        color: var(--text-main) !important;
+    }
+
+    [data-theme="dark"] .checkout-container .form-control::placeholder {
+        color: var(--text-secondary) !important;
+    }
+
+    [data-theme="dark"] .checkout-container .form-control:focus,
+    [data-theme="dark"] .checkout-container .form-select:focus {
+        border-color: var(--color-vinotinto) !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 127, 153, 0.2);
+    }
+
+    [data-theme="dark"] .checkout-container .form-select option {
+        background-color: var(--bg-card);
+        color: var(--text-main);
+    }
+</style>
+
+<script>
+    // Validación del formulario
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

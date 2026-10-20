@@ -1,0 +1,150 @@
+﻿{% extends 'aplicacion/layout_app.html' %}
+{% block title %}Mi Bolsa — HealthyFast App{% endblock %}
+{% block nav_carrito %}active{% endblock %}
+
+{% block content %}
+<div class="px-3 py-4">
+  <h1 class="fw-bold fs-5 mb-1">Mi <span class="text-vinotinto fuente-estetica">Bolsa</span></h1>
+  <p class="text-muted small mb-4">Revisa y ajusta tus productos antes de pagar</p>
+
+  <!-- ITEMS DEL CARRITO -->
+  <div id="items-carrito-app">
+    <div class="text-center py-5" id="carrito-vacio-app">
+      <i class="fa-solid fa-bag-shopping fs-1 text-muted mb-3 d-block"></i>
+      <h6 class="fw-bold">Tu bolsa está vacía</h6>
+      <p class="text-muted small mb-3">Agrega productos para comenzar tu compra.</p>
+      <a href="{{ url_for('main.app_productos') }}" class="btn btn-vinotinto rounded-pill px-4">
+        <i class="fa-solid fa-plus me-1"></i>Explorar Catálogo
+      </a>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div id="resumen-carrito-app" class="d-none">
+    <div class="resumen-app-card p-3 rounded-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-muted small">Subtotal</span>
+        <span id="subtotal-app" class="fw-semibold">$0 COP</span>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-muted small">Envío estimado</span>
+        <span class="fw-semibold text-success small">Gratis</span>
+      </div>
+      <hr class="my-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fw-bold">Total</span>
+        <span id="total-app" class="fw-bold text-vinotinto fs-5">$0 COP</span>
+      </div>
+    </div>
+
+    <a href="{{ url_for('main.app_envio') }}"
+       class="btn btn-vinotinto w-100 py-3 rounded-pill fw-bold fs-6 mb-3">
+      <i class="fa-solid fa-arrow-right me-2"></i>Continuar al Envío
+    </a>
+    <a href="{{ url_for('main.app_productos') }}"
+       class="btn btn-outline-dark w-100 py-2 rounded-pill fw-semibold small">
+      Seguir Comprando
+    </a>
+  </div>
+</div>
+
+<style>
+.item-carrito-app {
+  background-color: var(--bg-card);
+  border-radius: 16px; padding: 14px 12px; margin-bottom: 10px;
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex; align-items: center; gap: 12px;
+}
+.item-thumb {
+  width: 60px; height: 60px; border-radius: 10px;
+  background-color: #f0ebe3; flex-shrink: 0;
+  overflow: hidden;
+}
+.item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.resumen-app-card {
+  background-color: var(--bg-card);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+[data-theme="dark"] .item-carrito-app, [data-theme="dark"] .resumen-app-card {
+  border-color: rgba(255,255,255,0.06);
+}
+</style>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function renderCarritoApp() {
+    const guardado = localStorage.getItem('carritoHealthyFast');
+    const contenedor = document.getElementById('items-carrito-app');
+    const vacio = document.getElementById('carrito-vacio-app');
+    const resumen = document.getElementById('resumen-carrito-app');
+    const subtotalEl = document.getElementById('subtotal-app');
+    const totalEl = document.getElementById('total-app');
+
+    let items = [];
+    try { items = JSON.parse(guardado) || []; } catch(e) {}
+
+    if (items.length === 0) {
+      if (vacio) vacio.style.display = 'block';
+      if (resumen) resumen.classList.add('d-none');
+      return;
+    }
+
+    if (vacio) vacio.style.display = 'none';
+    if (resumen) resumen.classList.remove('d-none');
+
+    let html = '';
+    let total = 0;
+    items.forEach(item => {
+      total += Number(item.precio) * item.cantidad;
+      html += `
+        <div class="item-carrito-app">
+          <div class="item-thumb"><div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+            <i class="fa-solid fa-box text-muted"></i></div></div>
+          <div class="flex-grow-1">
+            <h6 class="fw-bold m-0 small">${item.nombre}</h6>
+            <small class="text-muted">${item.cantidad}x — $${Number(item.precio).toLocaleString('es-CO')} COP</small>
+            <div class="d-flex align-items-center gap-2 mt-1">
+              <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+                      style="width:26px;height:26px;font-size:0.75rem;"
+                      onclick="cambiarCantidadApp('${item.id}', -1)">−</button>
+              <span class="fw-bold small">${item.cantidad}</span>
+              <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+                      style="width:26px;height:26px;font-size:0.75rem;"
+                      onclick="cambiarCantidadApp('${item.id}', 1)">+</button>
+            </div>
+          </div>
+          <div class="text-end">
+            <div class="fw-bold text-vinotinto small">$${(Number(item.precio)*item.cantidad).toLocaleString('es-CO')}</div>
+            <button class="btn btn-sm btn-outline-danger mt-1 rounded-pill py-0 px-2"
+                    style="font-size:0.65rem;"
+                    onclick="eliminarDelCarrito('${item.id}'); renderCarritoApp();">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>`;
+    });
+
+    contenedor.innerHTML = html;
+    const fmt = v => '$' + v.toLocaleString('es-CO') + ' COP';
+    if (subtotalEl) subtotalEl.textContent = fmt(total);
+    if (totalEl) totalEl.textContent = fmt(total);
+  }
+
+  window.cambiarCantidadApp = function(id, delta) {
+    let items = [];
+    try { items = JSON.parse(localStorage.getItem('carritoHealthyFast')) || []; } catch(e) {}
+    const idx = items.findIndex(i => String(i.id) === String(id));
+    if (idx === -1) return;
+    items[idx].cantidad += delta;
+    if (items[idx].cantidad <= 0) items.splice(idx, 1);
+    localStorage.setItem('carritoHealthyFast', JSON.stringify(items));
+    renderCarritoApp();
+  };
+
+  renderCarritoApp();
+  window.addEventListener('storage', renderCarritoApp);
+});
+</script>
+{% endblock %}
+{% endblock %}

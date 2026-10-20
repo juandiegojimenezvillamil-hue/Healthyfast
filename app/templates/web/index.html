@@ -1,0 +1,265 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<header class="py-5 bg-vinotinto text-white text-center position-relative overflow-hidden" style="min-height: 45vh; background: linear-gradient(rgba(114,28,36,0.9), rgba(114,28,36,0.95));">
+    <div class="container py-5 scroll-reveal">
+        <h1 class="display-3 fw-bold mb-2">
+            PREPARACIÓN ES 
+            <span class="fuente-estetica text-warning text-lowercase">
+                bienestar
+            </span>
+        </h1>
+
+        <p class="lead mb-4 opacity-75">
+            Soluciones avanzadas en kits de emergencia y estética del cuidado personal.
+        </p>
+
+        <a href="/productos" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-vinotinto shadow-sm">
+            Ver Todo el Inventario
+        </a>
+    </div>
+</header>
+
+<section class="container py-5 text-center scroll-reveal">
+    <h2 class="fw-bold text-uppercase mb-4 fs-4">
+        Líneas de Especialidad
+    </h2>
+
+    <div class="row g-3 justify-content-center">
+
+        <div class="col-6 col-md-3">
+            <a href="/productos?categoria=skincare" class="btn btn-outline-dark w-100 py-3 rounded-4 fw-semibold">
+                Skincare
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <a href="/productos?categoria=body" class="btn btn-outline-dark w-100 py-3 rounded-4 fw-semibold">
+                Body Care
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <a href="/productos?categoria=pets" class="btn btn-outline-dark w-100 py-3 rounded-4 fw-semibold">
+                Pets Care
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<section class="container py-4 scroll-reveal">
+
+    <h2 class="fw-bold mb-4">
+        Nuestros Productos 
+        <span class="text-vinotinto fuente-estetica">
+            Estrella
+        </span>
+    </h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        {% for p in productos %}
+
+        <div class="col">
+            <div class="card h-100 card-custom p-3 shadow-sm">
+
+                <div class="zoom-container mb-3" style="height: 220px;">
+                    <img src="{{ p.imagen }}" alt="{{ p.nombre }}" class="w-100 h-100 object-fit-cover">
+                </div>
+
+                <h5 class="fw-bold text-dark m-0">
+                    {{ p.nombre }}
+                </h5>
+
+                <p class="text-muted small my-2">
+                    {{ p.desc }}
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center mt-auto">
+
+                    <span class="fw-bold text-vinotinto fs-5">
+                        ${{ "{:,.0f}".format(p.precio) }} COP
+                    </span>
+
+                    <button
+                     class="btn btn-sm btn-vinotinto rounded-pill px-3"
+                     onclick="agregarAlCarrito('{{ p.id }}', '{{ p.nombre }}', '{{ p.precio }}')">
+                     Añadir Bolsa
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+</section>
+
+<!-- SECCIÓN BENEFICIOS -->
+<section class="py-5 bg-light-custom scroll-reveal">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-2 fs-4 text-uppercase">¿Por qué elegirnos?</h2>
+        <p class="text-center text-muted mb-5 small">Calidad, confianza y servicio en cada entrega</p>
+
+        <div class="row g-4 text-center">
+
+            <div class="col-6 col-md-3">
+                <div class="beneficio-card p-4 rounded-4 h-100">
+                    <div class="beneficio-icono mx-auto mb-3">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1">Calidad Certificada</h6>
+                    <p class="text-muted small mb-0">Productos verificados y aprobados por expertos en salud.</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="beneficio-card p-4 rounded-4 h-100">
+                    <div class="beneficio-icono mx-auto mb-3">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1">Envío a Todo Colombia</h6>
+                    <p class="text-muted small mb-0">Despachos en 2 a 5 días hábiles a todo el territorio.</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="beneficio-card p-4 rounded-4 h-100">
+                    <div class="beneficio-icono mx-auto mb-3">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1">Pago Seguro</h6>
+                    <p class="text-muted small mb-0">Pago contraentrega en efectivo, sin compartir datos bancarios.</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="beneficio-card p-4 rounded-4 h-100">
+                    <div class="beneficio-icono mx-auto mb-3">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1">Soporte Especializado</h6>
+                    <p class="text-muted small mb-0">Equipo disponible Lun-Sáb para asesorarte en tu compra.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN SOBRE NOSOTROS -->
+<section class="container py-5 scroll-reveal">
+    <div class="row align-items-center g-5">
+
+        <div class="col-md-6">
+            <span class="badge bg-vinotinto rounded-pill px-3 py-2 mb-3 text-white fw-semibold">
+                Nuestra Historia
+            </span>
+            <h2 class="fw-bold display-6 mb-3">
+                Bienestar que <span class="text-vinotinto fuente-estetica">transforma</span> vidas
+            </h2>
+            <p class="text-muted mb-3">
+                <strong>Healthy Fast</strong> nació de la convicción de que prepararse no es un lujo,
+                es una responsabilidad. Ofrecemos botiquines de emergencia de alta especificación,
+                productos de skincare premium y soluciones de cuidado para toda la familia — incluidas las mascotas.
+            </p>
+            <p class="text-muted mb-4">
+                Trabajamos con proveedores verificados para garantizar que cada producto llegue a tus manos
+                con los más altos estándares de calidad y a precios accesibles para todos los colombianos.
+            </p>
+            <div class="d-flex gap-4 mb-4">
+                <div>
+                    <span class="fw-bold fs-3 text-vinotinto">4+</span>
+                    <p class="text-muted small mb-0">Líneas de producto</p>
+                </div>
+                <div>
+                    <span class="fw-bold fs-3 text-vinotinto">100%</span>
+                    <p class="text-muted small mb-0">Calidad garantizada</p>
+                </div>
+                <div>
+                    <span class="fw-bold fs-3 text-vinotinto">32</span>
+                    <p class="text-muted small mb-0">Ciudades y municipios con envío</p>
+                </div>
+            </div>
+            <a href="{{ url_for('main.productos') }}" class="btn btn-vinotinto rounded-pill px-5 fw-bold">
+                Explorar Tienda
+            </a>
+        </div>
+
+        <div class="col-md-6">
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="zoom-container rounded-4" style="height: 180px;">
+                        <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=500"
+                             alt="Botiquín de emergencia" class="w-100 h-100 object-fit-cover">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="zoom-container rounded-4" style="height: 180px;">
+                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=500"
+                             alt="Skincare premium" class="w-100 h-100 object-fit-cover">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="zoom-container rounded-4" style="height: 180px;">
+                        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500"
+                             alt="Cuidado mascotas" class="w-100 h-100 object-fit-cover">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="zoom-container rounded-4" style="height: 180px;">
+                        <img src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=500"
+                             alt="Body care" class="w-100 h-100 object-fit-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+.bg-light-custom {
+    background-color: var(--bg-beige);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] .bg-light-custom {
+    background-color: #0d0d0d;
+    border-color: rgba(255,255,255,0.05);
+}
+
+.beneficio-card {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.beneficio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] .beneficio-card {
+    border-color: rgba(255,255,255,0.06);
+}
+
+.beneficio-icono {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(114,28,36,0.1), rgba(114,28,36,0.18));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--color-vinotinto);
+}
+</style>
+
+{% endblock %}

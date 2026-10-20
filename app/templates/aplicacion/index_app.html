@@ -1,0 +1,115 @@
+﻿{% extends 'aplicacion/layout_app.html' %}
+{% block title %}HealthyFast — Inicio{% endblock %}
+{% block nav_inicio %}active{% endblock %}
+
+{% block content %}
+<!-- HERO COMPACTO MOBILE -->
+<section class="hero-app px-3 pt-4 pb-3 text-white text-center position-relative overflow-hidden">
+  <div class="py-3">
+    <p class="hero-app-sub mb-1 opacity-75 small">PREPARACIÓN ES</p>
+    <h1 class="fw-bold display-6 mb-2">
+      Tu <span class="fuente-estetica" style="color:#ffccd5;">bienestar</span>
+    </h1>
+    <p class="opacity-75 small mb-3">Kits de emergencia y estética premium en Colombia.</p>
+    <a href="{{ url_for('main.app_productos') }}"
+       class="btn btn-light rounded-pill px-4 py-2 fw-bold text-vinotinto shadow-sm">
+      Ver Catálogo
+    </a>
+    {% if session.get('rol', '')|lower == 'administrador' %}
+    <a href="{{ url_for('main.admin_dashboard') }}"
+       class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark shadow-sm ms-2">
+      <i class="fa-solid fa-gauge me-1"></i>
+      Panel Admin
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- CATEGORÍAS HORIZONTAL SCROLL -->
+<section class="px-3 pt-4 pb-2">
+  <h6 class="fw-bold mb-3 text-uppercase small">Líneas de Especialidad</h6>
+  <div class="categorias-scroll">
+    <a href="{{ url_for('main.app_productos') }}?categoria=skincare"
+       class="categoria-pill">
+      <span class="categoria-emoji">✨</span>Skincare
+    </a>
+    <a href="{{ url_for('main.app_productos') }}?categoria=body"
+       class="categoria-pill">
+      <span class="categoria-emoji">🧴</span>Body Care
+    </a>
+    <a href="{{ url_for('main.app_productos') }}?categoria=pets"
+       class="categoria-pill">
+      <span class="categoria-emoji">🐾</span>Pets
+    </a>
+  </div>
+</section>
+
+<!-- PRODUCTOS ESTRELLA -->
+<section class="px-3 pb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3 pt-2">
+    <h6 class="fw-bold text-uppercase small mb-0">Productos Estrella</h6>
+    <a href="{{ url_for('main.app_productos') }}" class="small text-vinotinto fw-semibold">Ver todos</a>
+  </div>
+
+  <div class="productos-grid-app">
+    {% for p in productos %}
+    <div class="producto-card-app">
+      <button type="button" class="p-0 border-0 bg-transparent w-100 text-start"
+              data-id="{{ p.id }}" data-nombre="{{ p.nombre }}" data-precio="{{ p.precio }}"
+              onclick="agregarAlCarrito(this.dataset.id, this.dataset.nombre, Number(this.dataset.precio))">
+        <div class="zoom-container rounded-3 mb-2" style="height: 160px;">
+          <img src="{{ p.imagen }}" alt="{{ p.nombre }}" class="w-100 h-100 object-fit-cover">
+        </div>
+      </button>
+      <span class="badge bg-light text-dark border text-uppercase mb-1"
+            style="font-size:0.6rem; font-family: monospace;">{{ p.categoria }}</span>
+      <h6 class="fw-bold m-0 small lh-sm">{{ p.nombre }}</h6>
+      <p class="text-muted mb-2" style="font-size:0.75rem; height:30px; overflow:hidden;">{{ p.desc }}</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-vinotinto small">${{ "{:,.0f}".format(p.precio) }} COP</span>
+        <button class="btn btn-vinotinto rounded-pill py-1 px-2"
+          data-id="{{ p.id }}" data-nombre="{{ p.nombre }}" data-precio="{{ p.precio }}"
+                style="font-size:0.7rem;"
+          onclick="agregarAlCarrito(this.dataset.id, this.dataset.nombre, Number(this.dataset.precio))">
+          <i class="fa-solid fa-plus me-1"></i>Añadir
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+.hero-app {
+  background: linear-gradient(135deg, #721c24 0%, #a93050 100%);
+  border-radius: 0 0 28px 28px;
+}
+.categorias-scroll {
+  display: flex; gap: 10px; overflow-x: auto;
+  padding-bottom: 8px; scrollbar-width: none;
+}
+.categorias-scroll::-webkit-scrollbar { display: none; }
+.categoria-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background-color: var(--bg-card); border: 1px solid rgba(0,0,0,0.08);
+  padding: 8px 14px; border-radius: 20px; white-space: nowrap;
+  font-size: 0.82rem; font-weight: 600; color: var(--text-main);
+  text-decoration: none; transition: all 0.2s ease; flex-shrink: 0;
+}
+.categoria-pill:hover, .categoria-pill:active {
+  background-color: var(--color-vinotinto); color: #fff; border-color: transparent;
+}
+.categoria-emoji { font-size: 1rem; }
+.productos-grid-app {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.producto-card-app {
+  background-color: var(--bg-card);
+  border-radius: 16px; padding: 12px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+[data-theme="dark"] .categoria-pill { border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .producto-card-app { border-color: rgba(255,255,255,0.06); }
+</style>
+{% endblock %}

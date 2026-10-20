@@ -1,0 +1,170 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>{% block title %}HealthyFast App{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <style>
+    :root { --bottom-nav-h: 68px; }
+    html, body { overflow-x: hidden; scroll-behavior: smooth; font-family: 'Inter', sans-serif; }
+    body { padding-bottom: var(--bottom-nav-h); background-color: var(--bg-beige); }
+
+    /* TOP APP BAR */
+    .app-topbar {
+      position: sticky; top: 0; z-index: 900;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .app-topbar .brand { font-weight: 800; font-size: 1.2rem; color: var(--text-main); text-decoration: none; }
+    .app-topbar .brand span { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--color-vinotinto); }
+
+    /* BOTTOM NAV */
+    .app-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--bottom-nav-h);
+      background-color: var(--bg-card);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: space-around;
+      z-index: 1000;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .app-nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.68rem;
+      font-weight: 600; padding: 8px 12px; border-radius: 12px;
+      transition: all 0.2s ease; flex: 1;
+    }
+    .app-nav-item i { font-size: 1.25rem; }
+    .app-nav-item.active { color: var(--color-vinotinto); }
+    .app-nav-item:hover { color: var(--color-vinotinto); background-color: rgba(114,28,36,0.06); }
+
+    /* CARRITO BADGE */
+    .cart-badge-app {
+      position: relative; display: inline-block;
+    }
+    .cart-badge-app .badge-num {
+      position: absolute; top: -6px; right: -8px;
+      background-color: var(--color-vinotinto); color: #fff;
+      font-size: 0.6rem; font-weight: 700;
+      width: 16px; height: 16px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* TOAST NOTIFICACIÓN */
+    #toast-notification { position: fixed; bottom: 84px; right: 16px; z-index: 2050; }
+
+    /* DARK MODE */
+    [data-theme="dark"] .app-topbar,
+    [data-theme="dark"] .app-bottom-nav {
+      background-color: var(--bg-card);
+      border-color: rgba(255,255,255,0.07);
+    }
+    [data-theme="dark"] .app-nav-item { color: var(--text-secondary); }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="pantalla-loader">
+    <div class="spinner-custom mb-3"></div>
+    <h4 class="fw-bold text-dark">HEALTHY<span class="fuente-estetica text-danger">fast</span></h4>
+  </div>
+
+  <!-- TOP BAR -->
+  <header class="app-topbar">
+    <a href="{{ url_for('main.app_index') }}" class="brand">
+      HEALTHY<span>fast</span>
+    </a>
+    <div class="d-flex align-items-center gap-2">
+      {% if session.get('rol', '')|lower == 'administrador' %}
+      <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-sm btn-vinotinto rounded-pill px-3 fw-bold" title="Panel Admin" aria-label="Panel Admin">
+        <i class="fa-solid fa-gauge me-1" style="font-size:0.85rem;"></i>
+        Panel Admin
+      </a>
+      {% endif %}
+      <button class="btn btn-sm btn-light rounded-circle" id="toggle-darkmode" style="width:36px;height:36px;">
+        <i class="fa-solid fa-moon" style="font-size:0.85rem;"></i>
+      </button>
+      <a href="{{ url_for('main.app_carrito') }}" class="cart-badge-app btn btn-sm btn-dark rounded-circle d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
+        <i class="fa-solid fa-bag-shopping" style="font-size:0.85rem;"></i>
+        <span class="badge-num" id="badge-contador-app">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ALERTAS FLASH -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="px-3 pt-2">
+    {% for cat, msg in messages %}
+    <div class="alert alert-{{ cat }} alert-dismissible fade show py-2 small rounded-3">
+      {{ msg }}
+      <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>{% block content %}{% endblock %}</main>
+
+  <!-- TOAST -->
+  <div id="toast-notification" class="toast-notification"></div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="app-bottom-nav">
+    <a href="{{ url_for('main.app_index') }}" class="app-nav-item {% block nav_inicio %}{% endblock %}">
+      <i class="fa-solid fa-house"></i>
+      <span>Inicio</span>
+    </a>
+    <a href="{{ url_for('main.app_productos') }}" class="app-nav-item {% block nav_productos %}{% endblock %}">
+      <i class="fa-solid fa-grid-2"></i>
+      <span>Catálogo</span>
+    </a>
+    <a href="{{ url_for('main.app_carrito') }}" class="app-nav-item {% block nav_carrito %}{% endblock %}">
+      <div class="cart-badge-app">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="badge-num" id="badge-contador-app-nav">0</span>
+      </div>
+      <span>Bolsa</span>
+    </a>
+    <a href="{{ url_for('main.login') }}" class="app-nav-item {% block nav_cuenta %}{% endblock %}">
+      <i class="fa-solid fa-user"></i>
+      <span>Cuenta</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/script.js', v='20260915-2') }}"></script>
+  <script>
+    // Sincronizar badge del carrito en la app
+    document.addEventListener('DOMContentLoaded', function() {
+      function actualizarBadgesApp() {
+        const guardado = localStorage.getItem('carritoHealthyFast');
+        let total = 0;
+        if (guardado) {
+          try {
+            const items = JSON.parse(guardado);
+            total = items.reduce((acc, i) => acc + (i.cantidad || 1), 0);
+          } catch(e) {}
+        }
+        ['badge-contador-app', 'badge-contador-app-nav'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = total;
+        });
+      }
+      actualizarBadgesApp();
+      window.addEventListener('storage', actualizarBadgesApp);
+    });
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

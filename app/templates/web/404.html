@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+<section class="container py-5 my-5 text-center scroll-reveal">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="display-1 fw-bold text-vinotinto mb-3">404</h1>
+            <h2 class="fw-bold mb-4">Página no encontrada</h2>
+            <p class="text-muted mb-5">
+                Lo sentimos, el enlace que intentas seguir no existe, se ha eliminado o ha cambiado de dirección.
+            </p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a href="{{ url_for('main.index') }}" class="btn btn-vinotinto rounded-pill px-4 py-2 fw-bold">
+                    <i class="fa-solid fa-house me-2"></i> Ir al Inicio
+                </a>
+                <a href="{{ url_for('main.productos') }}" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold">
+                    <i class="fa-solid fa-bag-shopping me-2"></i> Ver Catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

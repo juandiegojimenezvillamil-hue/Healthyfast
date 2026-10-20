@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<section class="container py-5 my-4 scroll-reveal">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+
+            <!-- Ícono animado de éxito -->
+            <div class="mb-4">
+                <div class="check-circle mx-auto">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+            </div>
+
+            <h1 class="fw-bold display-5 mb-2">
+                ¡Pedido <span class="text-vinotinto fuente-estetica">Confirmado!</span>
+            </h1>
+            <p class="text-muted mb-4">
+                Gracias por tu compra. Hemos recibido tu orden y la estamos procesando de inmediato.
+            </p>
+
+            <!-- Resumen del pedido -->
+            <div class="card card-custom p-4 shadow-sm text-start mb-4 rounded-4">
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                    <h5 class="fw-bold m-0">
+                        <i class="fa-solid fa-receipt me-2 text-vinotinto"></i>
+                        Comprobante de Facturación
+                    </h5>
+                    <span class="badge {% if pedido.estado_factura == 'Pagada' %}bg-success{% else %}bg-warning text-dark{% endif %} px-3 py-2 rounded-pill">
+                        {{ pedido.estado_factura or 'Confirmado' }}
+                    </span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase fw-bold d-block">Número de Factura / Orden</small>
+                        <span class="fw-bold fs-5 text-vinotinto">{{ pedido.numero_orden }}</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase fw-bold d-block">Total Facturado</small>
+                        <span class="fw-bold fs-5 text-success">
+                            ${{ "{:,.0f}".format(pedido.total) if pedido.total else "0" }} COP
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase fw-bold d-block">Método de Pago</small>
+                        <span class="fw-semibold">
+                            <i class="fa-solid fa-money-bill me-1 text-success"></i> Pago Contraentrega (Al recibir)
+                        </span>
+                    </div>
+                    {% if pedido.nombre_cliente and pedido.nombre_cliente.strip() %}
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase fw-bold d-block">Cliente</small>
+                        <span class="fw-semibold">{{ pedido.nombre_cliente }}</span>
+                    </div>
+                    {% endif %}
+                    {% if pedido.email %}
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase fw-bold d-block">Correo de Notificación</small>
+                        <span class="fw-semibold">{{ pedido.email }}</span>
+                    </div>
+                    {% endif %}
+                    {% if pedido.transportadora or pedido.guia %}
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase fw-bold d-block">Despacho Logístico</small>
+                        <span class="fw-semibold">
+                            <i class="fa-solid fa-truck me-1 text-vinotinto"></i>
+                            {{ pedido.transportadora or 'Healthy Express' }} ({{ pedido.guia }})
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% if pedido.direccion %}
+                    <div class="col-12">
+                        <small class="text-muted text-uppercase fw-bold d-block">Dirección de Entrega</small>
+                        <span class="fw-semibold">
+                            {{ pedido.direccion }}
+                            {% if pedido.ciudad %}, {{ pedido.ciudad }}{% endif %}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if pedido['items'] and pedido['items']|length > 0 %}
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-bold small text-uppercase text-muted mb-2">Artículos en esta orden:</h6>
+                    <div class="list-group list-group-flush rounded-3">
+                        {% for it in pedido['items'] %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 bg-transparent">
+                            <div>
+                                <span class="fw-bold small">{{ it.nombre }}</span>
+                                <small class="text-muted d-block">{{ it.cantidad }}x — ${{ "{:,.0f}".format(it.precio) }} COP</small>
+                            </div>
+                            <span class="badge bg-vinotinto rounded-pill">
+                                ${{ "{:,.0f}".format(it.precio * it.cantidad) }} COP
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Mensaje informativo -->
+            <div class="alert-conf mb-5 p-3 rounded-4 text-start d-flex align-items-center gap-3">
+                <i class="fa-solid fa-truck-fast text-vinotinto fs-3"></i>
+                <div>
+                    <strong>Entrega estimada en Colombia:</strong> Tu pedido será despachado en un plazo de <strong>2 a 5 días hábiles</strong>.
+                    Hemos enviado los detalles a tu correo electrónico.
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                <a href="{{ url_for('main.index') }}"
+                   class="btn btn-vinotinto rounded-pill px-5 py-2 fw-bold shadow-sm">
+                    <i class="fa-solid fa-bag-shopping me-2"></i>
+                    Seguir Comprando
+                </a>
+                <a href="{{ url_for('main.productos') }}"
+                   class="btn btn-outline-dark rounded-pill px-5 py-2 fw-semibold">
+                    Ver Más Productos
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+.check-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-vinotinto), #a93050);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 35px rgba(114, 28, 36, 0.35);
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.check-circle i {
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+@keyframes popIn {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.alert-conf {
+    background-color: rgba(114, 28, 36, 0.06);
+    border: 1px solid rgba(114, 28, 36, 0.12);
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+[data-theme="dark"] .alert-conf {
+    background-color: rgba(255, 127, 153, 0.08);
+    border-color: rgba(255, 127, 153, 0.18);
+}
+</style>
+
+{% endblock %}

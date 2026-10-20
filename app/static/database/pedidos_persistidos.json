@@ -1,0 +1,840 @@
+[
+  {
+    "id": "HF-21",
+    "cliente": "juan jimene",
+    "email": "jun@gmail.com",
+    "total": 59500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "calle102#64b-65",
+    "ciudad": "Bogota",
+    "telefono": "3219483031",
+    "tipo_documento": "CC",
+    "documento": "1141518163",
+    "pais": "Colombia",
+    "departamento": "Bogotá D.C.",
+    "referencia": "casa",
+    "cp": "11112111",
+    "fecha": "2026-10-01",
+    "numero_factura": "FACT-000001",
+    "factura": {
+      "numero_factura": "FACT-000001",
+      "codigo_unico": "d020320a-2b2b-4b4c-82a6-14c06283bdd0",
+      "fecha_emision": "2026-10-01",
+      "fecha_vencimiento": "2026-10-01",
+      "forma_pago": "Contado",
+      "medio_pago": "Efectivo contra entrega",
+      "tipo_operacion": "Venta nacional de bienes",
+      "moneda": "COP",
+      "comprador": {
+        "nombre": "juan jimene",
+        "tipo_documento": "CC",
+        "documento": "1141518163",
+        "pais": "Colombia",
+        "departamento": "Bogotá D.C.",
+        "ciudad": "Bogota",
+        "direccion": "calle102#64b-65",
+        "telefono": "3219483031",
+        "email": "jun@gmail.com"
+      },
+      "vendedor": {
+        "razon_social": "Healthy Fast",
+        "nit": "Por configurar",
+        "pais": "Colombia",
+        "departamento": "Por configurar",
+        "ciudad": "Por configurar",
+        "direccion": "Por configurar",
+        "telefono": "Por configurar",
+        "email": "fasthealthy40@gmail.com"
+      },
+      "lineas": [
+        {
+          "id_producto": "46",
+          "codigo": "46",
+          "nombre": "Termómetro digital",
+          "unidad": "UND",
+          "cantidad": 1,
+          "precio_unitario": 50000.0,
+          "bruto": 50000.0,
+          "descuento": 0.0,
+          "iva_porcentaje": 19.0,
+          "iva": 9500.0,
+          "total": 59500.0
+        }
+      ],
+      "subtotal": 50000.0,
+      "descuento": 0.0,
+      "total_bruto": 50000.0,
+      "iva_porcentaje": 19.0,
+      "iva": 9500.0,
+      "total_impuestos": 9500.0,
+      "total_neto": 59500.0,
+      "total_final": 59500.0
+    },
+    "items": [
+      {
+        "id": "46",
+        "nombre": "Termómetro digital",
+        "precio": 50000.0,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "HF-20",
+    "cliente": "juan jimen",
+    "email": "juandiego@gmail.com",
+    "total": 52000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "calle10#64b-34",
+    "ciudad": "Bogota",
+    "fecha": "2026-10-01",
+    "items": [
+      {
+        "id": "48",
+        "nombre": "Toalla",
+        "precio": 52000.0,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "HF-19",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-29",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-18",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-22",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-61",
+    "cliente": "samuel beltran",
+    "email": "danielbeltran122@gmail.com",
+    "total": 49400.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "cra141A#144c-12",
+    "ciudad": "Bogota",
+    "fecha": "2026-09-17",
+    "items": [
+      {
+        "id": "48",
+        "nombre": "Toalla",
+        "precio": 52000.0,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "HF-60",
+    "cliente": "samuel  vega",
+    "email": "aarturojimenezzz@gmail.com",
+    "total": 49500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "calle153b",
+    "ciudad": "Neiva",
+    "fecha": "2026-09-17",
+    "items": [
+      {
+        "id": "45",
+        "nombre": "Medicina básica",
+        "precio": 49500.0,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "HF-20",
+    "cliente": "juan jimenez",
+    "email": "juan@gmail.com",
+    "total": 95000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "calle102#70-32",
+    "ciudad": "Bogota",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": "7",
+        "nombre": "serum facial hombre",
+        "precio": 95000.0,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "HF-59",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-58",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-57",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-56",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-55",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-54",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-67A99EC4",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-19F6FD2E",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-15",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-9",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-8",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-7",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-6",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-5",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 9500.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Jugo Verde Detox",
+        "precio": 4500.0,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Barra de Proteína",
+        "precio": 2500.0,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-4",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-3",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-2",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-2B6EEFE7",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-86D9BDDB",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-CB444EE1",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-09-10",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-81029AA5",
+    "cliente": "jose santana",
+    "email": "mijo@gmail.com",
+    "total": 15044.0,
+    "estado": "Pendiente",
+    "metodo": "efectivo",
+    "direccion": "calle 10Asur#84b-este45",
+    "ciudad": "Bogotá",
+    "estado_region": "Cundinamarca",
+    "fecha": "2026-08-27",
+    "items": [
+      {
+        "id": "40",
+        "nombre": "Antisépticos",
+        "precio": "44.0",
+        "cantidad": 1
+      },
+      {
+        "id": "23",
+        "nombre": "aceite de coco mixto",
+        "precio": "15000.0",
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "HF-25348",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pagada",
+    "metodo": "tarjeta",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-08-25",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-49697",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pagada",
+    "metodo": "tarjeta",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-08-18",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-49614",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pagada",
+    "metodo": "tarjeta",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-08-18",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-49558",
+    "cliente": "Estudiante Prueba",
+    "email": "comprador@test.com",
+    "total": 420000.0,
+    "estado": "Pagada",
+    "metodo": "tarjeta",
+    "direccion": "Carrera 7 # 100-20",
+    "ciudad": "Bogotá",
+    "estado_region": "Bogotá D.C.",
+    "fecha": "2026-08-18",
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Industrial Platinum",
+        "precio": 180000,
+        "cantidad": 1
+      },
+      {
+        "id": 2,
+        "nombre": "Glow Serum Avanzado",
+        "precio": 120000,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "HF-9482",
+    "cliente": "Samuel Vega",
+    "total": 258000,
+    "estado": "Completado"
+  },
+  {
+    "id": "HF-9483",
+    "cliente": "Andrea Gómez",
+    "total": 78000,
+    "estado": "Pendiente"
+  },
+  {
+    "id": "HF-9484",
+    "cliente": "jose santana",
+    "total": 78000,
+    "estado": "Pendiente"
+  }
+]

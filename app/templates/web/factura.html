@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+{% block title %}Factura {{ factura.numero_factura }} — Healthy Fast{% endblock %}
+{% block content %}
+<section class="container py-4 py-lg-5 factura-page">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 factura-actions">
+    <div>
+      <p class="text-vinotinto text-uppercase small fw-bold mb-1">Pedido Confirmado</p>
+      <h1 class="h3 fw-bold mb-0">Factura {{ factura.numero_factura }}</h1>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-vinotinto rounded-pill px-4" href="{{ url_for('main.descargar_factura', numero_factura=factura.numero_factura) }}">
+        <i class="fa-solid fa-file-pdf me-2"></i>Descargar PDF
+      </a>
+      <button class="btn btn-outline-dark rounded-pill px-4" type="button" onclick="window.print()">
+        <i class="fa-solid fa-print me-2"></i>Imprimir
+      </button>
+    </div>
+  </div>
+
+  <article class="factura-documento p-3 p-md-4 p-lg-5">
+    <header class="row g-4 pb-4 border-bottom">
+      <div class="col-md-6">
+        <p class="text-vinotinto text-uppercase fw-bold small mb-2">Vendedor</p>
+        <h2 class="h4 fw-bold">{{ factura.vendedor.razon_social }}</h2>
+        <div class="small text-secondary">
+          <div>NIT: {{ factura.vendedor.nit }}</div>
+          <div>{{ factura.vendedor.direccion }}</div>
+          <div>{{ factura.vendedor.ciudad }}, {{ factura.vendedor.departamento }}, {{ factura.vendedor.pais }}</div>
+          <div>{{ factura.vendedor.telefono }} · {{ factura.vendedor.email }}</div>
+        </div>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="text-vinotinto text-uppercase fw-bold small mb-2">Documento</p>
+        <h2 class="display-6 fw-bold text-vinotinto">FACTURA</h2>
+        <div><strong>Número:</strong> {{ factura.numero_factura }}</div>
+        <div><strong>Fecha de emisión:</strong> {{ factura.fecha_emision }}</div>
+        <div><strong>Fecha de vencimiento:</strong> {{ factura.fecha_vencimiento }}</div>
+        <div><strong>Forma de pago:</strong> {{ factura.forma_pago }}</div>
+        <div><strong>Medio de pago:</strong> {{ factura.medio_pago }}</div>
+        <div><strong>Operación:</strong> {{ factura.tipo_operacion }}</div>
+        <div class="small text-secondary text-break"><strong>Identificador:</strong> {{ factura.codigo_unico }}</div>
+      </div>
+    </header>
+
+    <section class="py-4 border-bottom">
+      <p class="text-vinotinto text-uppercase fw-bold small mb-2">Comprador</p>
+      <div class="row g-2 small">
+        <div class="col-md-6"><strong>Nombre:</strong> {{ factura.comprador.nombre }}</div>
+        <div class="col-md-6"><strong>Documento:</strong> {{ factura.comprador.tipo_documento }} {{ factura.comprador.documento }}</div>
+        <div class="col-md-6"><strong>Dirección:</strong> {{ factura.comprador.direccion }}</div>
+        <div class="col-md-6"><strong>Ciudad / Departamento:</strong> {{ factura.comprador.ciudad }}, {{ factura.comprador.departamento }}</div>
+        <div class="col-md-6"><strong>País:</strong> {{ factura.comprador.pais }}</div>
+        <div class="col-md-6"><strong>Contacto:</strong> {{ factura.comprador.telefono }} · {{ factura.comprador.email }}</div>
+      </div>
+    </section>
+
+    <section class="py-4">
+      <h3 class="h6 text-uppercase fw-bold mb-3">Detalles de productos</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle factura-tabla mb-0">
+          <thead>
+            <tr>
+              <th>N.º</th><th>Código</th><th>Descripción</th><th>Unidad</th>
+              <th class="text-end">Cantidad</th><th class="text-end">Precio unitario</th>
+              <th class="text-end">Descuento</th><th class="text-end">IVA</th>
+              <th class="text-end">Precio de venta</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for linea in factura.lineas %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ linea.codigo }}</td>
+              <td>{{ linea.nombre }}</td>
+              <td>{{ linea.unidad }}</td>
+              <td class="text-end">{{ linea.cantidad }}</td>
+              <td class="text-end">${{ "{:,.2f}".format(linea.precio_unitario|float) }} COP</td>
+              <td class="text-end">${{ "{:,.2f}".format(linea.descuento|float) }} COP</td>
+              <td class="text-end">{{ linea.iva_porcentaje }}%<br/>${{ "{:,.2f}".format(linea.iva|float) }} COP</td>
+              <td class="text-end fw-semibold">${{ "{:,.2f}".format(linea.total|float) }} COP</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="d-flex justify-content-end pt-3 border-top">
+      <dl class="factura-totales mb-0">
+        <div><dt>Subtotal</dt><dd>${{ "{:,.2f}".format(factura.subtotal|float) }} COP</dd></div>
+        <div><dt>Descuento</dt><dd>-${{ "{:,.2f}".format(factura.descuento|float) }} COP</dd></div>
+        <div><dt>Total bruto</dt><dd>${{ "{:,.2f}".format(factura.total_bruto|float) }} COP</dd></div>
+        <div><dt>IVA ({{ factura.iva_porcentaje }}%)</dt><dd>${{ "{:,.2f}".format(factura.iva|float) }} COP</dd></div>
+        <div><dt>Total de impuestos</dt><dd>${{ "{:,.2f}".format(factura.total_impuestos|float) }} COP</dd></div>
+        <div><dt>Total neto</dt><dd>${{ "{:,.2f}".format(factura.total_neto|float) }} COP</dd></div>
+        <div class="factura-total-final"><dt>Total factura COP</dt><dd>${{ "{:,.2f}".format(factura.total_final|float) }} COP</dd></div>
+      </dl>
+    </section>
+    <p class="small text-secondary mt-4 mb-0">Documento generado con los datos registrados para esta compra. Identificador interno; no reemplaza la validación de factura electrónica DIAN.</p>
+  </article>
+</section>
+
+<script>
+  localStorage.removeItem('carritoHealthyFast');
+</script>
+
+<style>
+  .factura-documento { background: var(--bg-card, #fff); border: 1px solid var(--border-color, #d8d8d8); border-radius: 8px; }
+  .factura-tabla { font-size: .82rem; }
+  .factura-tabla thead th { background: #721c24; color: #fff; white-space: nowrap; }
+  .factura-totales { width: min(100%, 360px); }
+  .factura-totales div { display: flex; justify-content: space-between; gap: 1rem; padding: .25rem 0; }
+  .factura-totales dt, .factura-totales dd { margin: 0; }
+  .factura-total-final { border-top: 2px solid #721c24; color: #721c24; font-weight: 700; font-size: 1.1rem; margin-top: .25rem; padding-top: .6rem !important; }
+  @media print {
+    body { background: #fff !important; }
+    .factura-actions, header nav, footer, #pantalla-loader { display: none !important; }
+    .factura-page { max-width: none; padding: 0 !important; }
+    .factura-documento { border: 0; padding: 0 !important; }
+    .table-responsive { overflow: visible !important; }
+    .factura-tabla { font-size: 8pt; }
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,429 @@
+{% extends 'aplicacion/layout_app.html' %}
+{% block title %}HealthyFast — Panel Admin{% endblock %}
+{% block content %}
+
+<div class="container py-5 scroll-reveal">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+
+        <div>
+            <h1 class="fw-bold m-0">
+                Panel de Control
+                <span class="text-vinotinto fuente-estetica">
+                    Administrativo
+                </span>
+            </h1>
+
+            <p class="text-muted m-0">
+                Gestión de inventario y analíticas comerciales de Healthy Fast.
+            </p>
+        </div>
+
+        <button class="btn btn-vinotinto rounded-pill px-4 fw-bold" data-bs-toggle="modal"
+            data-bs-target="#modalAgregar">
+
+            <i class="fa-solid fa-circle-plus me-2"></i>
+            Subir Producto
+
+        </button>
+
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="row g-3 mb-5 text-dark">
+
+        <div class="col-md-4">
+
+            <div class="card card-custom p-4 shadow-sm border-start border-4 border-success">
+
+                <small class="text-uppercase text-muted fw-bold d-block">
+                    Analytics - Ventas Totales
+                </small>
+
+                <span class="display-6 fw-bold text-success">
+                    ${{ "{:,.0f}".format(total_ventas) }} COP
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card card-custom p-4 shadow-sm border-start border-4 border-primary">
+
+                <small class="text-uppercase text-muted fw-bold d-block">
+                    Volumen de Stock Global
+                </small>
+
+                <span class="display-6 fw-bold text-primary">
+                    {{ total_stock }} Unidades
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card card-custom p-4 shadow-sm border-start border-4 border-warning">
+
+                <small class="text-uppercase text-muted fw-bold d-block">
+                    Pedidos Registrados
+                </small>
+
+                <span class="display-6 fw-bold text-warning">
+                    {{ pedidos|length }} Órdenes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TABS -->
+    <ul class="nav nav-tabs border-bottom mb-4" id="adminTabs" role="tablist">
+
+        <li class="nav-item">
+            <button class="nav-link active fw-bold text-dark" id="prod-tab" data-bs-toggle="tab"
+                data-bs-target="#prod-panel">
+
+                Inventario (CRUD)
+
+            </button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link fw-bold text-dark" id="ped-tab" data-bs-toggle="tab" data-bs-target="#ped-panel">
+
+                Pedidos Activos
+
+            </button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link fw-bold text-dark" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-panel">
+
+                Usuarios del Sistema
+
+            </button>
+        </li>
+
+    </ul>
+
+    <!-- TAB CONTENT -->
+    <div class="tab-content" id="adminTabsContent">
+
+        <!-- INVENTARIO -->
+        <div class="tab-pane fade show active" id="prod-panel">
+
+            <div class="card card-custom shadow-sm p-3 table-responsive">
+
+                <table class="table align-middle text-dark">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for p in productos %}
+
+                        <tr>
+
+                            <td>
+                                <strong>#{{ p.id }}</strong>
+                            </td>
+
+                            <td>{{ p.nombre }}</td>
+
+                            <td class="text-uppercase small">
+                                {{ p.categoria }}
+                            </td>
+
+                            <td>
+                                ${{ "{:,.0f}".format(p.precio) }}
+                            </td>
+
+                            <td>
+                                <span class="badge bg-dark">
+                                    {{ p.stock }} uds
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <!-- EDITAR -->
+                                <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-bs-toggle="modal"
+                                    data-bs-target="#modalEditar" data-id="{{ p.id }}" data-nombre="{{ p.nombre }}"
+                                    data-categoria="{{ p.categoria }}" data-precio="{{ p.precio }}"
+                                    data-stock="{{ p.stock }}" data-desc="{{ p.desc|e }}">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+                                <!-- ELIMINAR -->
+                                <form method="POST" action="{{ url_for('main.eliminar_producto', id=p.id) }}"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('¿Eliminar el producto «{{ p.nombre }}»? Esta acción no se puede deshacer.');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Modal único para editar productos -->
+            <div class="modal fade" id="modalEditar" tabindex="-1">
+                <div class="modal-dialog">
+                    <form id="formEditar" class="modal-content text-dark" action="#" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold">Editar Producto</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Nombre</label>
+                                <input id="editNombre" type="text" class="form-control" name="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Categoría</label>
+                                <select id="editCategoria" class="form-select" name="categoria">
+                                    <option value="skincare">Skincare</option>
+                                    <option value="body">Body Care</option>
+                                    <option value="emergency">Emergency</option>
+                                    <option value="pets">Pets</option>
+                                </select>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label small fw-bold">Precio ($)</label>
+                                    <input id="editPrecio" type="number" class="form-control" name="precio" required>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label small fw-bold">Stock</label>
+                                    <input id="editStock" type="number" class="form-control" name="stock" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Descripción</label>
+                                <textarea id="editDesc" class="form-control" name="desc" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-vinotinto rounded-pill px-4">Actualizar
+                                Información</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="tab-pane fade" id="ped-panel">
+
+            <div class="card card-custom shadow-sm p-3">
+
+                <table class="table text-dark">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th>ID Orden</th>
+                            <th>Cliente</th>
+                            <th>Monto Total</th>
+                            <th>Estado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for ped in pedidos %}
+
+                        <tr>
+
+                            <td>
+                                <strong>{{ ped.id }}</strong>
+                            </td>
+
+                            <td>{{ ped.cliente }}</td>
+
+                            <td>
+                                ${{ "{:,.0f}".format(ped.total) }} COP
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    {{ ped.estado }}
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- USUARIOS -->
+        <div class="tab-pane fade" id="user-panel">
+
+            <div class="card card-custom shadow-sm p-3">
+
+                <table class="table text-dark">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo Institucional</th>
+                            <th>Rol Asignado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for u in usuarios %}
+
+                        <tr>
+
+                            <td>{{ u.nombre }}</td>
+
+                            <td>{{ u.correo }}</td>
+
+                            <td>
+                                <span class="badge bg-dark text-capitalize">
+                                    {{ u.rol }}
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL AGREGAR -->
+<div class="modal fade" id="modalAgregar" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <form id="formAgregarProducto" class="modal-content text-dark" action="{{ url_for('main.agregar_producto') }}" method="POST">
+            <div class="modal-header border-0">
+                <div>
+                    <h5 class="modal-title fw-bold">Agregar producto al catálogo</h5>
+                    <p class="text-muted small mb-0">Completa los datos y el producto quedará disponible en la tienda.
+                    </p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Imagen del producto</label>
+                        <select id="selectImagenProducto" class="form-select rounded-3" name="imagen">
+                            <option value="">Usar imagen automática</option>
+                            {% for imagen in imagenes_disponibles %}
+                            <option value="{{ imagen.valor }}">{{ imagen.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Al seleccionar una imagen, el sistema completará el resto del formulario automáticamente.</small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Nombre del producto</label>
+                        <input id="inputNombreProducto" type="text" class="form-control rounded-3" name="nombre"
+                            placeholder="Ej. Botiquín Premium" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Categoría</label>
+                        <select id="selectCategoriaProducto" class="form-select rounded-3" name="categoria">
+                            <option value="skincare">Skincare</option>
+                            <option value="body">Body Care</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="pets">Pets Care</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Subcategoría</label>
+                        <select id="selectSubcategoriaProducto" class="form-select rounded-3" name="subcategoria">
+                            <option value="hombre">Hombre</option>
+                            <option value="mujer">Mujer</option>
+                            <option value="mixto">Mixto</option>
+                            <option value="botiquin">Botiquín</option>
+                            <option value="mascotas">Mascotas</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Precio ($)</label>
+                        <input id="inputPrecioProducto" type="number" class="form-control rounded-3" name="precio" min="0" step="1000" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Stock inicial</label>
+                        <input id="inputStockProducto" type="number" class="form-control rounded-3" name="stock" min="0" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Descripción</label>
+                        <textarea id="textareaDescripcionProducto" class="form-control rounded-3" name="desc" rows="3"
+                            placeholder="Describe el producto para mostrarlo en la tienda" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="submit" class="btn btn-vinotinto rounded-pill px-4">
+                    Guardar producto
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+```

@@ -1,0 +1,328 @@
+{% extends 'layout.html' if version_web else 'aplicacion/layout_app.html' %}
+{% block title %}Pago — HealthyFast App{% endblock %}
+{% block content %}
+<div class="px-3 py-4 pago-app-page">
+  <a href="{{ url_for('main.envio' if version_web else 'main.app_envio') }}" class="btn btn-sm btn-outline-secondary rounded-pill mb-3">
+    <i class="fa-solid fa-arrow-left me-1"></i> Volver
+  </a>
+  <h1 class="fw-bold fs-5 mb-1">
+    Método de <span class="text-vinotinto fuente-estetica">Pago</span>
+  </h1>
+  <p class="text-muted small mb-4">Elige cómo deseas pagar tu pedido</p>
+
+  <div class="resumen-app-card resumen-pago-app p-3 rounded-4 mb-4">
+    <span class="text-muted small d-block">Total a pagar:</span>
+    <span id="total-pago-app-render" class="fw-bold text-vinotinto fs-4" aria-live="polite">$0 COP</span>
+    <div id="desglose-pago-app" class="small text-muted mt-2"></div>
+  </div>
+
+
+  <form id="formulario-pago-app" action="/procesar" method="POST">
+    <input type="hidden" name="items_carrito" id="input-items-carrito-app">
+    <input type="hidden" name="total_pedido" id="input-total-pedido-app">
+
+    <h2 class="fs-6 fw-bold mb-3">Métodos de Pago</h2>
+    <div class="d-flex flex-column gap-3 mb-4"></div>
+    <!-- Opción Efectivo -->
+    <label class="payment-option-app p-3 rounded-4 d-flex align-items-center gap-3">
+      <input type="radio" name="metodo" value="efectivo" checked class="form-check-input mt-0 fs-5">
+      <div
+        class="icon-box bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center"
+        style="width: 45px; height: 45px;">
+        <i class="fa-solid fa-money-bill-wave fs-5"></i>
+      </div>
+      <div class="flex-grow-1">
+        <span class="fw-bold d-block">Efectivo</span>
+        <span class="text-muted xsmall">Paga al recibir en tu domicilio</span>
+      </div>
+    </label>
+   
+    <!-- Opción Transferencia -->
+    <label class="payment-option-app p-3 rounded-4 d-flex align-items-center gap-3">
+      <input type="radio" name="metodo" value="transferencia" class="form-check-input mt-0 fs-5">
+      <div class="icon-box bg-info-subtle text-info rounded-circle d-flex align-items-center justify-content-center"
+        style="width: 45px; height: 45px;">
+        <i class="fa-solid fa-mobile-screen fs-5"></i>
+      </div>
+      <div class="flex-grow-1">
+        <span class="fw-bold d-block">Nequi / Daviplata</span>
+        <span class="text-muted xsmall">Transferencia rápida y segura</span>
+      </div>
+    </label>
+
+  </div>
+  <!-- Paneles Dinámicos de Detalles -->
+    <div id="detalles-pago-container">
+      
+      <!-- Panel Efectivo -->
+      <div id="panel-efectivo" class="form-pago-detalles mb-4 p-4 rounded-4 text-center">
+        <i class="fa-solid fa-truck-fast text-success fs-1 mb-3 d-block"></i>
+        <span class="fw-bold d-block">Prepararemos tu despacho</span>
+        <p class="text-muted small mb-0 mt-2">El repartidor recibirá el dinero exacto al momento de entregarte el pedido.</p>
+      </div>
+
+     
+      <!-- Panel Transferencia (Oculto por defecto) -->
+      <div id="panel-transferencia" class="form-pago-detalles mb-4 p-4 rounded-4 text-center d-none">
+        <span class="fw-bold d-block mb-2">Transfiere a nuestro número</span>
+        <p class="fs-4 fw-bold text-vinotinto mb-1">300 123 4567</p>
+        <p class="text-muted small mb-3">Por favor, ingresa el número de comprobante para validar tu pago.</p>
+        <input type="text" class="form-control rounded-pill text-center" placeholder="# de Comprobante" name="comprobante_transferencia">
+      </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-vinotinto w-100 py-3 rounded-pill fw-bold fs-6 shadow" id="btn-submit-app">
+      Confirmar Pago
+    </button>
+  </form>
+
+</div>
+
+<style>
+  .pago-app-page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .pago-app-page h1 {
+    color: var(--text-main);
+    letter-spacing: 0;
+  }
+
+  .pago-app-page > p {
+    color: var(--text-secondary) !important;
+  }
+
+  .pago-app-page > a:first-child {
+    border-color: var(--border-color, rgba(0, 0, 0, 0.12));
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .pago-app-page > a:first-child:hover {
+    color: var(--color-vinotinto);
+    border-color: var(--color-vinotinto);
+  }
+
+  .resumen-pago-app {
+    background: linear-gradient(135deg, rgba(114, 28, 36, 0.08), var(--bg-card));
+    border: 1px solid rgba(114, 28, 36, 0.14);
+    box-shadow: 0 8px 24px rgba(43, 43, 43, 0.06);
+  }
+
+  .xsmall {
+    font-size: 0.78rem;
+  }
+
+  .payment-option-app {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    cursor: pointer;
+    min-height: 76px;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .payment-option-app:hover,
+  .payment-option-app:has(input:checked) {
+    background-color: rgba(114, 28, 36, 0.045);
+    border-color: var(--color-vinotinto);
+    box-shadow: 0 6px 18px rgba(114, 28, 36, 0.1);
+  }
+
+  .payment-option-app:has(input:checked) {
+    transform: translateY(-1px);
+  }
+
+  .payment-option-app input {
+    accent-color: var(--color-vinotinto);
+  }
+
+  .form-pago-detalles {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    box-shadow: 0 5px 16px rgba(43, 43, 43, 0.04);
+  }
+
+  .form-pago-detalles .form-control {
+    min-height: 44px;
+    border-color: var(--border-color, rgba(0, 0, 0, 0.12));
+  }
+
+  .form-pago-detalles .form-control:focus {
+    border-color: var(--color-vinotinto);
+    box-shadow: 0 0 0 0.2rem rgba(114, 28, 36, 0.12);
+  }
+
+  #btn-submit-app {
+    border: 0;
+    box-shadow: 0 8px 18px rgba(114, 28, 36, 0.2) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #btn-submit-app:hover {
+    box-shadow: 0 10px 22px rgba(114, 28, 36, 0.28) !important;
+    transform: translateY(-1px);
+  }
+
+  [data-theme="dark"] .payment-option-app,
+  [data-theme="dark"] .form-pago-detalles {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-main);
+  }
+
+  [data-theme="dark"] .resumen-app-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+  }
+
+  [data-theme="dark"] .payment-option-app:hover,
+  [data-theme="dark"] .payment-option-app:has(input:checked) {
+    background-color: var(--bg-light);
+    border-color: var(--color-vinotinto);
+  }
+
+  [data-theme="dark"] .form-pago-detalles .form-control {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-main) !important;
+  }
+
+  [data-theme="dark"] .form-pago-detalles .form-control::placeholder {
+    color: var(--text-secondary) !important;
+  }
+
+  [data-theme="dark"] .resumen-pago-app {
+    background: linear-gradient(135deg, rgba(255, 127, 153, 0.12), var(--bg-card));
+    border-color: rgba(255, 127, 153, 0.24);
+  }
+
+  @media (max-width: 420px) {
+    .pago-app-page {
+      padding-top: 1.25rem !important;
+    }
+
+    .payment-option-app {
+      padding: 0.85rem !important;
+    }
+
+    .payment-option-app .icon-box {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const totalEl = document.getElementById('total-pago-app-render');
+    const inputItems = document.getElementById('input-items-carrito-app');
+    const inputTotal = document.getElementById('input-total-pedido-app');
+    function obtenerCarrito() {
+      let items = [];
+      try { items = JSON.parse(localStorage.getItem('carritoHealthyFast') || '[]') || []; } catch (e) { }
+      return Array.isArray(items) ? items : [];
+    }
+
+    function sincronizarTotalPago() {
+      const items = obtenerCarrito();
+      const subtotal = items.reduce((acumulado, item) => {
+        const precio = Number(item.precio) || 0;
+        const cantidad = Math.max(1, Number(item.cantidad) || 1);
+        return acumulado + (precio * cantidad);
+      }, 0);
+      const descuento = Math.round(subtotal * {{ 0.05 if aplicar_descuento else 0 }} * 100) / 100;
+      const iva = Math.round((subtotal - descuento) * 0.19 * 100) / 100;
+      const total = subtotal - descuento + iva;
+
+      if (totalEl) totalEl.textContent = '$' + total.toLocaleString('es-CO') + ' COP';
+      const desglose = document.getElementById('desglose-pago-app');
+      if (desglose) {
+        desglose.innerHTML = `Subtotal: $${subtotal.toLocaleString('es-CO')} COP<br>` +
+          `Descuento: -$${descuento.toLocaleString('es-CO')} COP<br>` +
+          `IVA (19%): $${iva.toLocaleString('es-CO')} COP`;
+      }
+      if (inputItems) inputItems.value = JSON.stringify(items);
+      if (inputTotal) inputTotal.value = total;
+      return total;
+    }
+
+    sincronizarTotalPago();
+    window.addEventListener('pageshow', sincronizarTotalPago);
+    window.addEventListener('storage', function (evento) {
+      if (evento.key === 'carritoHealthyFast') sincronizarTotalPago();
+    });
+
+    // Paneles de pago
+    const metodos = document.querySelectorAll('input[name="metodo"]');
+    const panelEfectivo = document.getElementById('panel-efectivo');
+    const panelTarjeta = document.getElementById('panel-tarjeta');
+    const panelTransferencia = document.getElementById('panel-transferencia');
+
+    function togglePaneles() {
+      const metodoSeleccionado = document.querySelector('input[name="metodo"]:checked')?.value || 'efectivo';
+      
+      if(panelEfectivo) panelEfectivo.classList.add('d-none');
+      if(panelTarjeta) panelTarjeta.classList.add('d-none');
+      if(panelTransferencia) panelTransferencia.classList.add('d-none');
+
+      if (metodoSeleccionado === 'efectivo' && panelEfectivo) {
+        panelEfectivo.classList.remove('d-none');
+      } else if (metodoSeleccionado === 'tarjeta' && panelTarjeta) {
+        panelTarjeta.classList.remove('d-none');
+      } else if (metodoSeleccionado === 'transferencia' && panelTransferencia) {
+        panelTransferencia.classList.remove('d-none');
+      }
+    }
+
+    metodos.forEach(radio => {
+      radio.addEventListener('change', togglePaneles);
+    });
+    
+    // Inicializar estado de paneles
+    togglePaneles();
+
+    // Validar el formulario antes de enviarlo al servidor.
+    const form = document.getElementById('formulario-pago-app');
+    if (form) {
+      form.addEventListener('submit', function (event) {
+        const metodoSeleccionado = document.querySelector('input[name="metodo"]:checked')?.value;
+        let esValido = true;
+        let mensajeError = "";
+
+        if (metodoSeleccionado === 'tarjeta') {
+          const numTarjeta = form.querySelector('input[name="num_tarjeta"]').value.trim();
+          const fechaTarjeta = form.querySelector('input[name="fecha_tarjeta"]').value.trim();
+          const cvcTarjeta = form.querySelector('input[name="cvc_tarjeta"]').value.trim();
+          if (!numTarjeta || !fechaTarjeta || !cvcTarjeta) {
+            esValido = false;
+            mensajeError = "Por favor, completa todos los campos de la tarjeta.";
+          }
+        } else if (metodoSeleccionado === 'transferencia') {
+          const comprobante = form.querySelector('input[name="comprobante_transferencia"]').value.trim();
+          if (!comprobante) {
+            esValido = false;
+            mensajeError = "Por favor, ingresa el número de comprobante de la transferencia.";
+          }
+        }
+
+        const items = obtenerCarrito();
+        if (items.length === 0) {
+           esValido = false;
+           mensajeError = "Tu carrito está vacío. No puedes realizar el pago.";
+        }
+
+        if (!esValido) {
+          event.preventDefault(); // Evitar que se envíe el formulario
+          alert(mensajeError);
+          return;
+        }
+
+        sincronizarTotalPago();
+      });
+    }
+  });
+</script>
+{% endblock %}

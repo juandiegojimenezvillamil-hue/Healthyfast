@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "nombre": "Industrial Platinum",
+    "categoria": "emergency",
+    "precio": 180000,
+    "imagen": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=500",
+    "badge": "Más Vendido",
+    "desc": "Botiquín premium de alta especificación para empresas.",
+    "stock": 0
+  },
+  {
+    "id": 2,
+    "nombre": "Glow Serum Avanzado",
+    "categoria": "skincare",
+    "precio": 120000,
+    "imagen": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=500",
+    "badge": "Premium",
+    "desc": "Ácido hialurónico puro para luminosidad natural.",
+    "stock": 0
+  },
+  {
+    "id": 3,
+    "nombre": "Óleo Corporal Relajante",
+    "categoria": "body",
+    "precio": 78000,
+    "imagen": "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=500",
+    "badge": "Wellness",
+    "desc": "Extractos concentrados de lavanda y almendras.",
+    "stock": 10
+  },
+  {
+    "id": 4,
+    "nombre": "Kit Patitas Sanas",
+    "categoria": "pets",
+    "precio": 45000,
+    "imagen": "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500",
+    "badge": "Mascotas",
+    "desc": "Bálsamo protector e hidratante para cojinetes de perros y gatos.",
+    "stock": 30
+  },
+  {
+    "id": 5,
+    "nombre": "Aceite Perros",
+    "categoria": "mascotas",
+    "precio": 15000.0,
+    "stock": 100,
+    "desc": "s",
+    "imagen": "/static/img/categorias/mascotas/aceite%20para%20perros.jpeg",
+    "badge": "Nuevo",
+    "subcategoria": "mascotas"
+  }
+]
