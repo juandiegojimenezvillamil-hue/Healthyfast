@@ -102,10 +102,36 @@ PRODUCTOS_BD = [
 ]
 
 # Usuarios demo para pruebas rápidas y acceso al panel admin sin BD.
+# Mantener las credenciales compatibles con los datos semilla de la base de datos
+# (admin@healthyfast.com / hector009 y estudiante@healthyfast.com / cliente123).
 USUARIOS_BD = [
-    {"correo": "admin@healthyfast.com", "nombre": "Profesor Evaluador", "rol": "administrador"},
-    {"correo": "estudiante@healthyfast.com", "nombre": "Samuel Vega", "rol": "cliente"}
+    {"correo": "admin@healthyfast.com", "nombre": "Profesor Evaluador", "rol": "administrador", "password": "hector009"},
+    {"correo": "estudiante@healthyfast.com", "nombre": "Samuel Vega", "rol": "cliente", "password": "cliente123"},
+    {"correo": "cliente@healthyfast.com", "nombre": "Laura Cliente", "rol": "cliente", "password": "roro6"},
 ]
+
+CREDENCIALES_DEMO = {
+    "admin@healthyfast.com": {"hector009", "admin123"},
+    "estudiante@healthyfast.com": {"cliente123"},
+    "cliente@healthyfast.com": {"cliente123", "roro6"},
+    "sofia.admin@healthyfast.com": {"hector010"},
+}
+
+
+def _credenciales_demo_validas(correo: str, password: str) -> bool:
+    """Acepta los accesos demo y los aliases usados en la documentación y la BD."""
+    correo_normalizado = (correo or '').strip().lower()
+    if not correo_normalizado or not password:
+        return False
+
+    aliases = {correo_normalizado}
+    if correo_normalizado in {'cliente@healthyfast.com', 'estudiante@healthyfast.com'}:
+        aliases.update({'cliente@healthyfast.com', 'estudiante@healthyfast.com'})
+
+    for alias in aliases:
+        if password in CREDENCIALES_DEMO.get(alias, set()):
+            return True
+    return False
 
 # Datos de pedidos de ejemplo para mostrar estadísticas y fallback local.
 PEDIDOS_BD = [
@@ -1209,11 +1235,17 @@ def login():
             for u in USUARIOS_BD:
                 if u['correo'].lower() != correo:
                     continue
-                password_guardada = u.get('password', '')
-                credenciales_validas = bool(password_guardada and check_password_hash(password_guardada, password))
-                credenciales_validas = credenciales_validas or (
-                    not password_guardada and password in ('admin123', 'cliente123')
-                )
+                password_guardada = str(u.get('password') or '')
+                credenciales_validas = False
+                if password_guardada:
+                    if password_guardada.startswith(('pbkdf2:', 'scrypt:')):
+                        credenciales_validas = check_password_hash(password_guardada, password)
+                    else:
+                        credenciales_validas = password_guardada == password
+                        if not credenciales_validas:
+                            credenciales_validas = _credenciales_demo_validas(u.get('correo') or correo, password)
+                else:
+                    credenciales_validas = _credenciales_demo_validas(u.get('correo') or correo, password)
                 if credenciales_validas:
                     rol = u['rol']
                     nombre = u['nombre']

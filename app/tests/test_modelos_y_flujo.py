@@ -146,6 +146,25 @@ class FlujoCompraRutasTest(unittest.TestCase):
         self.assertIn(b'/productos/categoria/mixto', respuesta_web.data)
         self.assertIn(b'?categoria=mixto', respuesta_app.data)
 
+    def test_login_demo_acepta_credenciales_semilla_y_fallback(self):
+        res_admin = self.client.post('/login', data={'correo': 'admin@healthyfast.com', 'password': 'admin123'}, follow_redirects=False)
+        self.assertEqual(res_admin.status_code, 302)
+        self.assertEqual(res_admin.headers.get('Location'), '/')
+
+        with self.client.session_transaction() as sess:
+            sess.clear()
+
+        res_admin_seed = self.client.post('/login', data={'correo': 'admin@healthyfast.com', 'password': 'hector009'}, follow_redirects=False)
+        self.assertEqual(res_admin_seed.status_code, 302)
+        self.assertEqual(res_admin_seed.headers.get('Location'), '/')
+
+        with self.client.session_transaction() as sess:
+            sess.clear()
+
+        res_estudiante = self.client.post('/login', data={'correo': 'estudiante@healthyfast.com', 'password': 'cliente123'}, follow_redirects=False)
+        self.assertEqual(res_estudiante.status_code, 302)
+        self.assertEqual(res_estudiante.headers.get('Location'), '/')
+
     def test_rutas_app_movil(self):
         with self.client.session_transaction() as sess:
             sess['usuario'] = 'estudiante@healthyfast.com'
