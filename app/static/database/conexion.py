@@ -1,40 +1,37 @@
+import logging
 import os
 from typing import Any, Dict, Optional, cast
 
 import mysql.connector
 from mysql.connector import Error
 
+logger = logging.getLogger(__name__)
+
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', os.environ.get('DB_HOST')),
+    'host': os.getenv('DB_HOST') or '127.0.0.1',
     'port': int(os.getenv('DB_PORT', '3306')),
-    'user': os.getenv('DB_USER', 'root'),
+    'user': os.getenv('DB_USER') or 'root',
     'password': os.getenv('DB_PASSWORD', ''),
-    'database': os.getenv('DB_NAME', 'health'),
+    'database': os.getenv('DB_NAME') or 'healthdb1',
     'charset': 'utf8mb4',
     'autocommit': True,
 }
 
 
 def get_connection():
-    """Obtiene una conexión a la base de datos MySQL con fallback a healthy_fast si health no existe."""
-    configs = [dict(DB_CONFIG)]
-
-    nombre_alternativo = 'healthy_fast' if DB_CONFIG['database'] == 'healthdb' else 'healthdb1'
-    alt_config = dict(DB_CONFIG)
-    alt_config['database'] = nombre_alternativo
-    configs.append(alt_config)
-
-    for cfg in configs:
-        cfg.setdefault('connect_timeout', 2)
-        cfg.setdefault('autocommit', True)
-        try:
-            return mysql.connector.connect(**cfg)
-        except (Error, OSError, TimeoutError, ValueError):
-            continue
-        except Exception:
-            continue
-
-    return None
+    """Conecta a la base configurada; retorna None si MySQL no está disponible."""
+    try:
+        return mysql.connector.connect(**DB_CONFIG, connection_timeout=5)
+    except (Error, OSError, TimeoutError, ValueError) as error:
+        logger.error(
+            "No se pudo conectar a MySQL en %s:%s, base '%s', usuario '%s': %s",
+            DB_CONFIG['host'],
+            DB_CONFIG['port'],
+            DB_CONFIG['database'],
+            DB_CONFIG['user'],
+            error,
+        )
+        return None
 
 
 

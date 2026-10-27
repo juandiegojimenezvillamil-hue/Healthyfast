@@ -11,8 +11,8 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-BASE_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(BASE_DIR / 'app'))
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_DIR))
 
 
 # Auxiliar para extraer un valor de una fila de resultados de MySQL.
